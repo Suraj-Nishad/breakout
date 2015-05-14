@@ -5,11 +5,17 @@
 int main( int argc, char* argv[] )
 {
     RenderEngine engine;
-    PNGImage background("MCTestTaskBackground.png");
-      
-
     engine.CreateWindow();
+
+    Texture::MAX_X = engine.Width();
+    Texture::MAX_Y = engine.Height();
+
+    PNGImage background("MCTestTaskBackground.png");
     background.Load(engine);
+
+    PNGImage paddle("MCTestTaskPaddle.png");
+    paddle.Load(engine);
+    paddle.SetPosition(engine.Width() / 2, engine.Height() - 50);
 
     bool quit = false;
     SDL_Event e;
@@ -17,6 +23,7 @@ int main( int argc, char* argv[] )
 	{
         std::list<Texture *> textures;
         textures.push_back(&background);
+        textures.push_back(&paddle);
 
         engine.Render(textures);
 
@@ -28,6 +35,7 @@ int main( int argc, char* argv[] )
                 quit = true;
                 break;
             case SDL_MOUSEMOTION:
+                paddle.SetPosition(e.motion.x-paddle.Width()/2, paddle.Y());
                 break;
             default:
                 break;

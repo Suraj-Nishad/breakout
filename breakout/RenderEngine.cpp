@@ -9,6 +9,8 @@ RenderEngine::RenderEngine()
     //members init
 	_window = NULL;
     _renderer = NULL;
+    _width = 0;
+    _height = 0;
 
 #ifdef _DEBUG
     SDL_LogSetAllPriority(SDL_LOG_PRIORITY_WARN);
@@ -61,6 +63,9 @@ bool RenderEngine::CreateWindow
     //we only have 1 window
     if(_window != NULL)
         return false;
+
+    _width = width;
+    _height = height;
 
     //create window at undefined position at the desktop
     _window = SDL_CreateWindow(title.c_str(),

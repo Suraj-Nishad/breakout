@@ -5,11 +5,19 @@
 class Texture
 {
 public:
+    static int MAX_X, MAX_Y;
+
+public:
     virtual ~Texture(void);
 
     inline int Width() {return _width;}
     inline int Height() {return _height;}
-    inline int SetPosition(int x, int y) {_x = x; _y = y;}
+    void SetPosition(int x, int y);
+
+    inline int X() {return _x;}
+    inline int Y() {return _y;}
+
+
     inline bool IsValid() {return _texture != NULL;}
 
     void Free();

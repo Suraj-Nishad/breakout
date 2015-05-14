@@ -20,8 +20,12 @@ public:
 
     inline SDL_Renderer *Handle() {return _renderer;}
 
+    inline int Width() {return _width;}
+    inline int Height() {return _height;}
+
 private:
 	SDL_Window *_window;
     SDL_Renderer *_renderer;
+    int _width, _height;
 };
 
