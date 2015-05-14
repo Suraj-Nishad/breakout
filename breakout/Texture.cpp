@@ -5,32 +5,40 @@ int Texture::MAX_Y = 0x7fffffff;
 
 Texture::Texture(void)
 {
-    _texture = NULL;
     _width = 0;
     _height = 0;
     _x = 0;
     _y = 0;
+    _has_color = false;
+    _r = _g = _b = 0;
 }
 
 Texture::~Texture(void)
 {
-    Free();
 }
 
-void Texture::Free()
+Texture::Texture(const Texture &another_texture)
 {
-    if(_texture != NULL)
-        SDL_DestroyTexture(_texture);
-    _texture = NULL;
+    _width = another_texture._width;
+    _height = another_texture._height;
+    _x = another_texture._x;
+    _y = another_texture._y;
+    _has_color = another_texture._has_color;
+    _r = another_texture._r;
+    _g = another_texture._g;
+    _b = another_texture._b;
 }
 
 void Texture::Show(RenderEngine &engine)
 {
-    if(IsValid() == false)
+    SDL_Texture *texture = GetTexture();
+    if(texture == NULL)
         return;
-
+    
+    if(_has_color)
+        SDL_SetTextureColorMod(texture, _r, _g ,_b);
     SDL_Rect dst = {_x, _y, _width, _height};
-    SDL_RenderCopy(engine.Handle(), _texture, NULL, &dst);
+    SDL_RenderCopy(engine.Handle(), texture, NULL, &dst);
 }
 
 void Texture::SetPosition(int x, int y)
@@ -46,4 +54,23 @@ void Texture::SetPosition(int x, int y)
     if(_y > max_y)
         _y = max_y;
 
+}
+
+void Texture::SetColor(Uint8 r, Uint8 g, Uint8 b)
+{
+    _has_color = true;
+    _r = r;
+    _g = g;
+    _b = b;
+}
+
+
+WeakCopyTexture::WeakCopyTexture(Texture &another_texture) : Texture(another_texture)
+{
+    _original_texture = &another_texture;
+}
+
+SDL_Texture *WeakCopyTexture::GetTexture()
+{
+    return _original_texture->GetTexture();
 }

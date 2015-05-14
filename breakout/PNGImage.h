@@ -12,9 +12,13 @@ public:
 
     bool Load(RenderEngine &engine);
 
-    inline void UnLoad() {Free();}
+    void UnLoad();
 
 protected:
+    virtual SDL_Texture *GetTexture();
+
     std::string _filename;
+    
+    SDL_Texture *_texture;
 };
 

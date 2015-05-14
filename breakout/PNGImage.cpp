@@ -3,17 +3,18 @@
 
 PNGImage::PNGImage(const std::string &filename) : _filename(filename)
 {
+    _texture = NULL;
 }
 
 
 PNGImage::~PNGImage(void)
 {
+    UnLoad();
 }
 
 bool PNGImage::Load(RenderEngine &engine)
 {
-    if(IsValid() == true)
-        Free();
+    UnLoad();
 
     SDL_Surface *loaded = IMG_Load(_filename.c_str());
     if(loaded == NULL)
@@ -39,4 +40,18 @@ bool PNGImage::Load(RenderEngine &engine)
     SDL_FreeSurface(loaded);
 
     return IsValid();
+}
+
+void PNGImage::UnLoad()
+{
+    if(_texture != NULL)
+    {
+        SDL_DestroyTexture(_texture);
+        _texture = NULL;
+    }
+}
+
+SDL_Texture *PNGImage::GetTexture()
+{
+    return _texture;
 }

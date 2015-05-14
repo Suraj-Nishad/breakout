@@ -24,6 +24,9 @@
     <None Include="..\images\MCTestTaskPaddle.png">
       <Filter>Images</Filter>
     </None>
+    <None Include="..\images\ball.png">
+      <Filter>Images</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Header Files">

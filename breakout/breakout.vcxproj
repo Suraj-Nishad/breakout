@@ -58,7 +58,8 @@
       <AdditionalLibraryDirectories>C:\miniclip\breakout\SDL2-2.0.3\lib\x86</AdditionalLibraryDirectories>
       <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;msvcrt.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
-      <IgnoreSpecificDefaultLibraries>mscvrtd.lib</IgnoreSpecificDefaultLibraries>
+      <IgnoreSpecificDefaultLibraries>
+      </IgnoreSpecificDefaultLibraries>
     </Link>
     <PostBuildEvent>
       <Command>xcopy /y "$(SolutionDir)SDL2-2.0.3\lib\x86\*.dll" "$(OutDir)"
@@ -102,6 +103,7 @@ xcopy /y "$(SolutionDir)images\*.*" "$(OutDir)"</Command>
     <ClInclude Include="RenderEngine.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\images\ball.png" />
     <None Include="..\images\MCTestTaskBackground.png" />
     <None Include="..\images\MCTestTaskPaddle.png" />
     <None Include="..\images\MCTestTaskPiece.png" />
