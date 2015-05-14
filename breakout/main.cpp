@@ -31,11 +31,13 @@ int main( int argc, char* argv[] )
 
     WeakCopyTexture green_piece(piece);
     green_piece.SetColor(0, 255, 0);
-    green_piece.SetPosition(piece.Width(), 0);
+    green_piece.Width(2*piece.Width());
+    green_piece.SetPosition(red_piece.Width(), 0);
     
     WeakCopyTexture blue_piece(piece);
     blue_piece.SetColor(0, 0, 255);
-    blue_piece.SetPosition(2*piece.Width(), 0);
+    blue_piece.Width(3*piece.Width());
+    blue_piece.SetPosition(red_piece.Width() + green_piece.Width(), 0);
     
 
     bool quit = false;

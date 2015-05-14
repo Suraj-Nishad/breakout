@@ -15,7 +15,9 @@ public:
     virtual ~Texture(void);
 
     inline int Width() {return _width;}
+    inline void Width(int w) {_width = w;}
     inline int Height() {return _height;}
+    inline void Height(int h) {_height = h;}
     void SetPosition(int x, int y);
     void SetColor(Uint8 r, Uint8 g, Uint8 b);
 
