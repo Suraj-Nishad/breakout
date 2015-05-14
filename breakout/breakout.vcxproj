@@ -56,7 +56,9 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>C:\miniclip\breakout\SDL2-2.0.3\lib\x86</AdditionalLibraryDirectories>
-      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;msvcrt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
+      <IgnoreSpecificDefaultLibraries>mscvrtd.lib</IgnoreSpecificDefaultLibraries>
     </Link>
     <PostBuildEvent>
       <Command>xcopy /y "$(SolutionDir)SDL2-2.0.3\lib\x86\*.dll" "$(OutDir)"
@@ -90,9 +92,13 @@ xcopy /y "$(SolutionDir)images\*.*" "$(OutDir)"</Command>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="PNGImage.cpp" />
+    <ClCompile Include="Texture.cpp" />
     <ClCompile Include="RenderEngine.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="PNGImage.h" />
+    <ClInclude Include="Texture.h" />
     <ClInclude Include="RenderEngine.h" />
   </ItemGroup>
   <ItemGroup>

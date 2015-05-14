@@ -1,4 +1,5 @@
 #include "RenderEngine.h"
+#include "Texture.h"
 #include <sstream>
 #include <stdexcept>
 #include "SDL_log.h"
@@ -8,8 +9,11 @@ RenderEngine::RenderEngine()
     //members init
 	_window = NULL;
     _renderer = NULL;
-    _background = NULL;
 
+#ifdef _DEBUG
+    SDL_LogSetAllPriority(SDL_LOG_PRIORITY_WARN);
+#endif
+ 
     //first, load the SDL lib
 	if(SDL_Init(SDL_INIT_VIDEO) < 0)
     {
@@ -34,9 +38,6 @@ RenderEngine::RenderEngine()
 
 RenderEngine::~RenderEngine(void)
 {
-    if(_background != NULL)
-        SDL_DestroyTexture(_background);
-
     if(_renderer != NULL)
         SDL_DestroyRenderer(_renderer);
 
@@ -104,47 +105,19 @@ bool RenderEngine::CreateWindow
     return true;
 }
 
-SDL_Texture *RenderEngine::LoadPNGImage(const std::string &file)
-{ 
-    SDL_Surface *loaded = IMG_Load(file.c_str());
-    if(loaded == NULL)
-    {
-        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Can't load PNG file %s. IMG_Load error ", file.c_str(), SDL_GetError());
-        return NULL;
-    }
-
-    //optimize loaded image to screen format
-    SDL_Texture *texture = SDL_CreateTextureFromSurface(_renderer, loaded);
-    if(texture == NULL)
-    {
-        SDL_LogError(SDL_LOG_CATEGORY_RENDER,
-                     "Can't create texture from PNG file %s. SDL_CreateTextureFromSurface error ", 
-                     file.c_str(), 
-                     SDL_GetError());
-    }
-
-    //get rid of the loaded image
-    SDL_FreeSurface(loaded);
-
-    return texture;
-}
-
-void RenderEngine::SetBackgroundImage(const std::string &file)
-{
-    if(_background != NULL)
-        SDL_DestroyTexture(_background);
-    _background = LoadPNGImage(file);
-}
-
-void RenderEngine::Render()
+void RenderEngine::Render(const std::list<Texture *> &textures)
 {
     //Clear screen
-    SDL_RenderClear(_renderer);
+    SDL_RenderClear(Handle());
 
-    //Render texture to screen
-    SDL_RenderCopy(_renderer, _background, NULL, NULL);
-
+    //Render textures to screen
+    for(std::list<Texture *>::const_iterator texture_itr = textures.begin();
+        texture_itr != textures.end();
+        texture_itr++)
+    {
+        (*texture_itr)->Show(*this);
+    }
 
     //Update screen
-    SDL_RenderPresent(_renderer);
+    SDL_RenderPresent(Handle());
 }

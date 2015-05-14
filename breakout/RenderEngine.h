@@ -2,6 +2,9 @@
 #include "SDL.h"
 #include "SDL_image.h"
 #include <string>
+#include <list>
+
+class Texture;
 
 class RenderEngine
 {
@@ -13,16 +16,12 @@ public:
                       int width = 640,
                       int height = 480);
 
-    void SetBackgroundImage(const std::string &file);
+    void Render(const std::list<Texture *> &textures);
 
-    void Render();
-
-protected:
-    SDL_Texture *LoadPNGImage(const std::string &file);
+    inline SDL_Renderer *Handle() {return _renderer;}
 
 private:
 	SDL_Window *_window;
     SDL_Renderer *_renderer;
-    SDL_Texture *_background;
 };
 
