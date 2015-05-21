@@ -16,8 +16,8 @@ Paddle::Paddle
     fixture.restitution = 1;
     _body->CreateFixture(&fixture);
 
-    _min_x = game_area.MarginPixel();
-    _max_x = _min_x + game_area.WidthPixel() - _png_image.Width();
+    _min_x = game_area.MarginPixel() + _png_image.Width()/2;
+    _max_x = game_area.MarginPixel() + game_area.WidthPixel() - _png_image.Width()/2;
 }
 
 Paddle::~Paddle(void)
@@ -31,5 +31,5 @@ void Paddle::SetX(int x)
     if(x>_max_x)
         x = _max_x;
 
-    _body->SetTransform(b2Vec2(_physics.Pixel2Meter(x+_png_image.Width()/2), _body->GetPosition().y), _body->GetAngle());
+    _body->SetTransform(b2Vec2(_physics.Pixel2Meter(x), _body->GetPosition().y), _body->GetAngle());
 }
