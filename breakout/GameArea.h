@@ -3,9 +3,12 @@
 #include "PhysicsSimulator.h"
 #include "RenderEngine.h"
 #include "Texture.h"
-
+#include "PNGImage.h"
 #include <vector>
 #include <list>
+
+class Ball;
+class Paddle;
 
 class Line : public IRenderElement
 {
@@ -17,8 +20,11 @@ public:
     inline b2Vec2 &Point0() {return _point0;}
     inline b2Vec2 &Point1() {return _point1;}
 
+    inline void SetColor(int r, int g, int b) {_r = r; _g = g; _b = b;}
+
 protected:
     int _x0, _y0, _x1, _y1;
+    int _r, _g, _b;
     b2Vec2 _point0, _point1;
 };
 
@@ -26,7 +32,7 @@ protected:
 class GameArea
 {
 public:
-    GameArea(PhysicsSimulator &physics, RenderEngine &engine);
+    GameArea();
     virtual ~GameArea(void);
 
     inline int WidthPixel() {return _width;}
@@ -39,12 +45,21 @@ public:
 
     void AddTexture(std::list<IRenderElement *> &elements);
 
+    void SetMouseX(int x);
+
+    void Step();
+
 protected:
-    b2Body *_body;
-    PhysicsSimulator &_physics;
+    RenderEngine _engine;
+    PhysicsSimulator _physics;
+    PNGImage _background;
+
+    b2Body *_body, *_ground;
     int _width, _height;
     std::vector<Line *> _lines;
 
+    Ball *_ball;
+    Paddle *_paddle;
 };
 
 

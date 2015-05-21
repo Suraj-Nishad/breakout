@@ -7,6 +7,7 @@ Paddle::Paddle
     GameArea &game_area
 ) : GameObject(engine, physics, "MCTestTaskPaddle.png", b2_kinematicBody)
 {
+    _png_image.SetColor(255,0,0);
     _body->SetTransform(b2Vec2(physics.Pixel2Meter(engine.Width()/2), physics.Pixel2Meter(engine.Height()-_png_image.Height()-50)), _body->GetAngle());
     b2FixtureDef fixture;
     b2PolygonShape rect;

@@ -17,7 +17,7 @@ RenderEngine::RenderEngine()
 #endif
  
     //first, load the SDL lib
-	if(SDL_Init(SDL_INIT_VIDEO) < 0)
+	if(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER ) < 0)
     {
         std::stringstream ss;
         ss << "SDL could not initialize. Error " << SDL_GetError();

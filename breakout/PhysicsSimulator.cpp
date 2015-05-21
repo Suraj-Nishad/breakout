@@ -5,8 +5,7 @@ PhysicsSimulator::PhysicsSimulator(void)
 {
     b2Vec2 gravity(0,0);
     _world = new b2World(gravity);
-    _world->SetContactListener(this);
-    
+    _world->SetContactListener(this);    
 }
 
 
