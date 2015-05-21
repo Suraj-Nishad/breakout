@@ -92,12 +92,19 @@ xcopy /y "$(SolutionDir)images\*.*" "$(OutDir)"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Ball.cpp" />
+    <ClCompile Include="GameArea.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="PhysicsSimulator.cpp" />
     <ClCompile Include="PNGImage.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="RenderEngine.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Ball.h" />
+    <ClInclude Include="GameArea.h" />
+    <ClInclude Include="IRenderElement.h" />
+    <ClInclude Include="PhysicsSimulator.h" />
     <ClInclude Include="PNGImage.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="RenderEngine.h" />

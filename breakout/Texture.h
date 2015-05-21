@@ -1,10 +1,11 @@
 #pragma once
 #include "SDL.h"
 #include "RenderEngine.h"
+#include "IRenderElement.h"
 
 class WeakCopyTexture;
 
-class Texture
+class Texture : public IRenderElement
 {
 friend WeakCopyTexture;
 
@@ -26,7 +27,7 @@ public:
 
     inline bool IsValid() {return GetTexture() != NULL;}
 
-    void Show(RenderEngine &engine);
+    virtual void Show(RenderEngine &engine);
 
 protected:
     Texture(void);

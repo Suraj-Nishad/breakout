@@ -1,5 +1,5 @@
 #include "RenderEngine.h"
-#include "Texture.h"
+#include "IRenderElement.h"
 #include <sstream>
 #include <stdexcept>
 #include "SDL_log.h"
@@ -13,7 +13,7 @@ RenderEngine::RenderEngine()
     _height = 0;
 
 #ifdef _DEBUG
-    SDL_LogSetAllPriority(SDL_LOG_PRIORITY_WARN);
+    SDL_LogSetAllPriority(SDL_LOG_PRIORITY_INFO);
 #endif
  
     //first, load the SDL lib
@@ -110,13 +110,13 @@ bool RenderEngine::CreateWindow
     return true;
 }
 
-void RenderEngine::Render(const std::list<Texture *> &textures)
+void RenderEngine::Render(const std::list<IRenderElement *> &textures)
 {
     //Clear screen
     SDL_RenderClear(Handle());
 
     //Render textures to screen
-    for(std::list<Texture *>::const_iterator texture_itr = textures.begin();
+    for(std::list<IRenderElement *>::const_iterator texture_itr = textures.begin();
         texture_itr != textures.end();
         texture_itr++)
     {

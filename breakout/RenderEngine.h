@@ -4,7 +4,7 @@
 #include <string>
 #include <list>
 
-class Texture;
+class IRenderElement;
 
 class RenderEngine
 {
@@ -16,7 +16,7 @@ public:
                       int width = 640,
                       int height = 480);
 
-    void Render(const std::list<Texture *> &textures);
+    void Render(const std::list<IRenderElement *> &textures);
 
     inline SDL_Renderer *Handle() {return _renderer;}
 
