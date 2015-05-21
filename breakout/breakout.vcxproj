@@ -94,7 +94,9 @@ xcopy /y "$(SolutionDir)images\*.*" "$(OutDir)"</Command>
   <ItemGroup>
     <ClCompile Include="Ball.cpp" />
     <ClCompile Include="GameArea.cpp" />
+    <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Paddle.cpp" />
     <ClCompile Include="PhysicsSimulator.cpp" />
     <ClCompile Include="PNGImage.cpp" />
     <ClCompile Include="Texture.cpp" />
@@ -103,7 +105,9 @@ xcopy /y "$(SolutionDir)images\*.*" "$(OutDir)"</Command>
   <ItemGroup>
     <ClInclude Include="Ball.h" />
     <ClInclude Include="GameArea.h" />
+    <ClInclude Include="GameObject.h" />
     <ClInclude Include="IRenderElement.h" />
+    <ClInclude Include="Paddle.h" />
     <ClInclude Include="PhysicsSimulator.h" />
     <ClInclude Include="PNGImage.h" />
     <ClInclude Include="Texture.h" />

@@ -21,21 +21,21 @@ Line::Line(PhysicsSimulator &physics, int x0, int y0, int x1, int y1 )
 GameArea::GameArea
 (
     PhysicsSimulator &physics,
-    int width, 
-    int height
+    RenderEngine &engine
  ) : _physics(physics)
 {
-    _width = width-20;
-    _height = height-20;
+    engine.CreateWindow("Breakout", 500, 700);
 
+    _width = engine.Width()-2*GAME_AREA_MARGIN;    
+    _height = engine.Height()-2*GAME_AREA_MARGIN;
 
     b2BodyDef body_def;
      _body = _physics.World().CreateBody(&body_def);
 
-    _lines.push_back(new Line(physics, 20, 20, _width, 20));
-    _lines.push_back(new Line(physics, 20, 20, 20, _height));
-    _lines.push_back(new Line(physics, _width, _height, _width, 20));
-    _lines.push_back(new Line(physics, _width, _height, 20, _height));
+    _lines.push_back(new Line(physics, GAME_AREA_MARGIN, GAME_AREA_MARGIN, engine.Width()-GAME_AREA_MARGIN, GAME_AREA_MARGIN));
+    _lines.push_back(new Line(physics, GAME_AREA_MARGIN, GAME_AREA_MARGIN, GAME_AREA_MARGIN, engine.Height()-GAME_AREA_MARGIN));
+    _lines.push_back(new Line(physics, engine.Width()-GAME_AREA_MARGIN, engine.Height()-GAME_AREA_MARGIN, engine.Width()-GAME_AREA_MARGIN, GAME_AREA_MARGIN));
+    _lines.push_back(new Line(physics, engine.Width()-GAME_AREA_MARGIN, engine.Height()-GAME_AREA_MARGIN, GAME_AREA_MARGIN, engine.Height()-GAME_AREA_MARGIN));
 
     b2EdgeShape edge;
     b2FixtureDef fixture;

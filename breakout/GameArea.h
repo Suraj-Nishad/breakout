@@ -22,17 +22,20 @@ protected:
     b2Vec2 _point0, _point1;
 };
 
+#define GAME_AREA_MARGIN 20
 class GameArea
 {
 public:
-    GameArea(PhysicsSimulator &physics, int width, int height);
+    GameArea(PhysicsSimulator &physics, RenderEngine &engine);
     virtual ~GameArea(void);
 
     inline int WidthPixel() {return _width;}
     inline int HeightPixel() {return _height;}
+    inline int MarginPixel() {return GAME_AREA_MARGIN;}
 
     inline float WidthMeter() {return _physics.Pixel2Meter(_width);}
     inline float HeightMeter() {return _physics.Pixel2Meter(_height);}
+    inline float MarginMeter() {return _physics.Pixel2Meter(GAME_AREA_MARGIN);}
 
     void AddTexture(std::list<IRenderElement *> &elements);
 

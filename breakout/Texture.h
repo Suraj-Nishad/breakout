@@ -10,9 +10,6 @@ class Texture : public IRenderElement
 friend WeakCopyTexture;
 
 public:
-    static int MAX_X, MAX_Y;
-
-public:
     virtual ~Texture(void);
 
     inline int Width() {return _width;}

@@ -1,14 +1,9 @@
 #include "Texture.h"
 
-int Texture::MAX_X = 0x7fffffff;
-int Texture::MAX_Y = 0x7fffffff;
-
 Texture::Texture(void)
 {
-    _width = 0;
-    _height = 0;
-    _x = 0;
-    _y = 0;
+    _width = _height = 0;
+    _x = _y = 0;
     _has_color = false;
     _r = _g = _b = 0;
 }
@@ -43,16 +38,8 @@ void Texture::Show(RenderEngine &engine)
 
 void Texture::SetPosition(int x, int y)
 {
-    _x = (x<0?0:x); 
-    _y = (y<0?0:y);
-
-    int max_x = MAX_X-Width();
-    int max_y = MAX_Y-Height();
-
-    if(_x > max_x)
-        _x = max_x;
-    if(_y > max_y)
-        _y = max_y;
+    _x = x;
+    _y = y;
 
 }
 
@@ -63,7 +50,6 @@ void Texture::SetColor(Uint8 r, Uint8 g, Uint8 b)
     _g = g;
     _b = b;
 }
-
 
 WeakCopyTexture::WeakCopyTexture(Texture &another_texture) : Texture(another_texture)
 {

@@ -5,22 +5,20 @@
 #include "PhysicsSimulator.h"
 #include "GameArea.h"
 #include "Ball.h"
+#include "Paddle.h"
 
 int main( int argc, char* argv[] )
 {
 
     RenderEngine engine;
-    engine.CreateWindow();
     PhysicsSimulator physics;
-    GameArea game_area(physics, engine.Width(), engine.Height());
-
-    Texture::MAX_X = engine.Width();
-    Texture::MAX_Y = engine.Height();
+    GameArea game_area(physics, engine);
 
     PNGImage background("MCTestTaskBackground.png");
     background.Load(engine);
 
     Ball ball(engine, physics);
+    Paddle paddle(engine, physics, game_area);
 
     bool quit = false;
     SDL_Event e;
@@ -30,6 +28,7 @@ int main( int argc, char* argv[] )
         textures.push_back(&background);
         game_area.AddTexture(textures);
         ball.AddTexture(textures);
+        paddle.AddTexture(textures);
         engine.Render(textures);
         physics.Step();
 
@@ -41,6 +40,7 @@ int main( int argc, char* argv[] )
                 quit = true;
                 break;
             case SDL_MOUSEMOTION:
+                paddle.SetX(e.motion.x);
             default:
                 break;
             }
