@@ -10,8 +10,8 @@ Paddle::Paddle(GameArea &game_area) : GameObject(game_area, b2_kinematicBody), _
     b2PolygonShape rect;
     rect.SetAsBox(_game.Physics().Pixel2Meter(_paddle_png.Width()/2), _game.Physics().Pixel2Meter(_paddle_png.Height()/2));
     //HACK: We don't really want a perfect box to avoid horizontal movement.
-    rect.m_vertices[0].x *= 1.05;
-    rect.m_vertices[3].x *= 1.05;
+    rect.m_vertices[0].x *= 0.9;
+    rect.m_vertices[3].x *= 0.9;
 
     fixture.shape = &rect;
     fixture.density = 0;
@@ -39,4 +39,11 @@ void Paddle::SetX(int x)
 Texture * Paddle::GetTexture()
 {
     return &_paddle_png;
+}
+
+void Paddle::GetCenterPoint(int &x, int &y)
+{
+    Texture *this_texture = GetTexture();
+    x = _game.Physics().Meter2Pixel(_body->GetPosition().x);
+    y = _game.Physics().Meter2Pixel(_body->GetPosition().y)-(this_texture->Height() / 2);
 }

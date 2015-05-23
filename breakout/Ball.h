@@ -14,12 +14,19 @@ public:
 
     inline void Destroyed(bool value) {_destroyed = value;}
 
+    void SetInitialPosition(int x, int y);
+
+    void Start();
+
+    void Stop();
+
 protected:
 
     virtual Texture * GetTexture();
 
     virtual void EndContact( IContactObject *another_object );
 
+    void CheckVelocity();
 
     bool _destroyed;
 

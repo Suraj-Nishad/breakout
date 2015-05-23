@@ -31,7 +31,9 @@
     <ClCompile Include="Piece.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GroundLine.cpp" />
+    <ClCompile Include="GroundLine.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\images\MCTestTaskBackground.png">
@@ -89,6 +91,8 @@
     <ClInclude Include="Piece.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="GroundLine.h" />
+    <ClInclude Include="GroundLine.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

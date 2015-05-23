@@ -28,8 +28,8 @@ Piece::Piece
     b2PolygonShape rect;
     rect.SetAsBox(_game.Physics().Pixel2Meter(_piece_texture.Width()/2), _game.Physics().Pixel2Meter(_piece_texture.Height()/2));
     //HACK: We don't really want a perfect box to avoid horizontal movement.
-    rect.m_vertices[0].x *= 1.05;
-    rect.m_vertices[3].x *= 1.05;
+    rect.m_vertices[1].x *= 0.9;
+    rect.m_vertices[2].x *= 0.9;
     
     fixture.shape = &rect;
     fixture.density = 0;

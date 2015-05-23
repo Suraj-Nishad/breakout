@@ -31,11 +31,24 @@ protected:
 };
 
 #define GAME_AREA_MARGIN 20
+
+typedef enum
+{
+    GAME_STATE_NOT_PLAYING = 0,
+    GAME_STATE_PLAYING,
+    GAME_STATE_WIN,
+    GAME_STATE_OVER
+} GAME_STATE;
 class GameArea
 {
 public:
     GameArea();
+
+    void CreateGameObjects();
+
     virtual ~GameArea(void);
+
+    void DestroyGameObjects();
 
     inline int WidthPixel() {return _width;}
     inline int HeightPixel() {return _height;}
@@ -46,8 +59,13 @@ public:
     inline float MarginMeter() {return _physics.Pixel2Meter(GAME_AREA_MARGIN);}
 
     void SetMouseX(int x);
+    void MouseClick();
 
     void Step(Uint32 timer_value);
+
+    void GameOver();
+
+    void GameWin();
 
     inline PhysicsSimulator &Physics() {return _physics;}
     inline RenderEngine &Renderer() {return _engine;}
@@ -65,6 +83,8 @@ protected:
     Ball *_ball;
     Paddle *_paddle;
     GroundLine *_ground;
+
+    GAME_STATE _game_state;
 };
 
 

@@ -48,27 +48,10 @@ GameArea::GameArea() : _background("MCTestTaskBackground.png")
         edge.Set(_lines[i]->Point0(), _lines[i]->Point1());
         _body->CreateFixture(&fixture);
     }
-
-    
-    _ground = new GroundLine(*this);
-     _paddle = new Paddle(*this);
-
-    _ball = new Ball(*this);
-    int x, y, max_width;
-    for(int i=0; i<4; i++)
-    {
-        x = GAME_AREA_MARGIN;
-        y = GAME_AREA_MARGIN + i*Piece::PNGHeight();
-        max_width = _width;
         
-        while(max_width > 0) 
-        {
-            Piece *piece = new Piece(*this, x, y, max_width);
-            x += piece->Width();
-            max_width -= piece->Width();
-            _pieces.push_back(piece);
-        }
-    }
+    _ground = new GroundLine(*this);
+
+    CreateGameObjects();
 }
 
 GameArea::~GameArea(void)
@@ -79,10 +62,9 @@ GameArea::~GameArea(void)
     }
     if(_ground)
         delete _ground;
-    if(_ball)
-        delete _ball;
-    if(_paddle)
-        delete _paddle;
+
+    DestroyGameObjects();
+
     _physics.World().DestroyBody(_body);
 }
 
@@ -92,8 +74,8 @@ void GameArea::Step(Uint32 timer_value)
 
     if(_ball != NULL && _ball->Destroyed())
     {
-        delete _ball;
-        _ball = NULL;
+        GameOver();
+
     }
 
     std::vector<IRenderElement *> textures;    
@@ -112,10 +94,17 @@ void GameArea::Step(Uint32 timer_value)
         {
             delete (*itr);
             itr = _pieces.erase(itr);
-        }        
+        }
     }
 
-    if(_ball) _ball->AddTexture(textures);
+    if(_pieces.empty())
+    {
+        GameWin();
+
+    }
+
+    if(_ball) 
+        _ball->AddTexture(textures);
     _paddle->AddTexture(textures);
 
     for(unsigned int i=0; i<_lines.size(); i++)
@@ -130,4 +119,85 @@ void GameArea::Step(Uint32 timer_value)
 void GameArea::SetMouseX( int x )
 {
     _paddle->SetX(x);
+
+    if(_game_state == GAME_STATE_NOT_PLAYING && _ball != NULL)
+    {
+        int paddle_x, paddle_y;
+        _paddle->GetCenterPoint(paddle_x, paddle_y);
+        _ball->SetInitialPosition(paddle_x, paddle_y);
+    }
+}
+
+void GameArea::DestroyGameObjects()
+{
+    for(std::list<Piece *>::iterator itr = _pieces.begin();
+        itr != _pieces.end();
+        itr++)
+    {
+        delete (*itr);
+    }
+    _pieces.clear();
+    if(_ball)
+        delete _ball;
+    _ball = NULL;
+    if(_paddle)
+        delete _paddle;
+    _paddle = NULL;
+}
+
+void GameArea::CreateGameObjects()
+{
+    _game_state = GAME_STATE_NOT_PLAYING;
+    _paddle = new Paddle(*this);
+    _ball = new Ball(*this);
+    int paddle_x, paddle_y;
+    _paddle->GetCenterPoint(paddle_x, paddle_y);
+    _ball->SetInitialPosition(paddle_x, paddle_y);
+
+    int x, y, max_width;
+    for(int i=0; i<4; i++)
+    {
+        x = GAME_AREA_MARGIN;
+        y = GAME_AREA_MARGIN + i*Piece::PNGHeight();
+        max_width = _width;
+
+        while(max_width > 0) 
+        {
+            Piece *piece = new Piece(*this, x, y, max_width);
+            x += piece->Width();
+            max_width -= piece->Width();
+            _pieces.push_back(piece);
+        }
+    }
+}
+
+void GameArea::MouseClick()
+{
+    switch(_game_state)
+    {
+    case GAME_STATE_NOT_PLAYING:
+        _ball->Start();
+        _game_state = GAME_STATE_PLAYING;
+        break;
+    case GAME_STATE_WIN:
+    case GAME_STATE_OVER:
+        DestroyGameObjects();
+        CreateGameObjects();
+        break;
+    default:
+        break;
+    }
+}
+
+void GameArea::GameWin()
+{
+    _ball->Stop();
+    _game_state = GAME_STATE_WIN;
+}
+
+void GameArea::GameOver()
+{
+    delete _ball;
+    _ball = NULL;
+    _game_state = GAME_STATE_OVER;
 }

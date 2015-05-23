@@ -28,6 +28,8 @@ int main( int argc, char* argv[] )
 {
     GameArea game_area;
 
+    srand(SDL_GetTicks());
+
     SDL_AddTimer(15, TimerCallback, &game_area);
 
     bool quit = false;
@@ -43,6 +45,9 @@ int main( int argc, char* argv[] )
                 break;
             case SDL_MOUSEMOTION:
                 game_area.SetMouseX(e.motion.x);
+                break;
+            case SDL_MOUSEBUTTONUP:
+                game_area.MouseClick();
                 break;
             case SDL_USEREVENT:
                 game_area.Step((Uint32)e.user.data1);

@@ -13,6 +13,8 @@ public:
 
     void SetX(int x);
 
+    void GetCenterPoint(int &x, int &y);
+
 protected:
 
     virtual Texture * GetTexture();
