@@ -2,6 +2,7 @@
 #include "Texture.h"
 #include "Ball.h"
 #include "Paddle.h"
+#include "Piece.h"
 
 Line::Line(PhysicsSimulator &_physics, int x0, int y0, int x1, int y1 )
 {
@@ -23,6 +24,7 @@ void Line::Show( RenderEngine &_engine )
 GameArea::GameArea() : _background("MCTestTaskBackground.png")
 {
     _engine.CreateWindow("Breakout", 500, 700);
+    Piece::LoadPNG(_engine);
     _background.Load(_engine);
 
     _width = _engine.Width()-2*GAME_AREA_MARGIN;    
@@ -55,6 +57,23 @@ GameArea::GameArea() : _background("MCTestTaskBackground.png")
 
     _ball = new Ball(_engine, _physics);
     _paddle = new Paddle(_engine, _physics, *this);
+
+
+    int x, y, max_width;
+    for(int i=0; i<4; i++)
+    {
+        x = GAME_AREA_MARGIN;
+        y = GAME_AREA_MARGIN + i*Piece::PNGHeight();
+        max_width = _width;
+        
+        while(max_width > 0) 
+        {
+            Piece *piece = new Piece(_engine, _physics, x, y, max_width);
+            x += piece->Width();
+            max_width -= piece->Width();
+            _pieces.push_back(piece);
+        }
+    }
 }
 
 GameArea::~GameArea(void)
@@ -70,23 +89,37 @@ GameArea::~GameArea(void)
     _physics.World().DestroyBody(_body);
 }
 
-void GameArea::AddTexture( std::list<IRenderElement *> &elements )
+void GameArea::Step(Uint32 timer_value)
 {
+    _physics.Step((float)timer_value/1000);
+
+    std::list<IRenderElement *> textures;    
+    
     for(unsigned int i=0; i<_lines.size(); i++)
     {
-        elements.push_back(_lines[i]);
+        textures.push_back(_lines[i]);
     }
-}
 
-void GameArea::Step()
-{
-    _physics.Step();
-
-    std::list<IRenderElement *> textures;
     textures.push_back(&_background);
-    this->AddTexture(textures);
+
+    std::list<Piece *>::iterator itr = _pieces.begin();
+    while(itr != _pieces.end())
+    {
+        if((*itr)->Destroyed() == false)
+        {
+            (*itr)->AddTexture(textures);
+            itr++;
+        }
+        else
+        {
+            delete (*itr);
+            itr = _pieces.erase(itr);
+        }        
+    }
+
     _ball->AddTexture(textures);
     _paddle->AddTexture(textures);
+
     _engine.Render(textures);
 
 }

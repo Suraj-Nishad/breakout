@@ -28,6 +28,9 @@
     <ClCompile Include="Paddle.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Piece.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\images\MCTestTaskBackground.png">
@@ -80,6 +83,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Paddle.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Piece.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

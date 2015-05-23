@@ -98,6 +98,7 @@ xcopy /y "$(SolutionDir)images\*.*" "$(OutDir)"</Command>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Paddle.cpp" />
     <ClCompile Include="PhysicsSimulator.cpp" />
+    <ClCompile Include="Piece.cpp" />
     <ClCompile Include="PNGImage.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="RenderEngine.cpp" />
@@ -109,6 +110,7 @@ xcopy /y "$(SolutionDir)images\*.*" "$(OutDir)"</Command>
     <ClInclude Include="IRenderElement.h" />
     <ClInclude Include="Paddle.h" />
     <ClInclude Include="PhysicsSimulator.h" />
+    <ClInclude Include="Piece.h" />
     <ClInclude Include="PNGImage.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="RenderEngine.h" />

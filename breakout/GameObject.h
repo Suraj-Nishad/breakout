@@ -1,28 +1,32 @@
 #pragma once
 
 #include "RenderEngine.h"
-#include "PNGImage.h"
 #include "PhysicsSimulator.h"
 
 #include <string>
 #include <list>
 
+class Texture;
+
 class GameObject : public IContactObject
 {
 public:
     GameObject(RenderEngine &engine, 
-               PhysicsSimulator &physics, 
-               const std::string &png_filename,
+               PhysicsSimulator &physics,
                b2BodyType body_type);
 
     virtual ~GameObject(void);
 
     void AddTexture(std::list<IRenderElement *> &elements);
 
-    virtual void Contact( IContactObject *another_object );
+    virtual void BeginContact(IContactObject *another_object);
+
+    virtual void EndContact(IContactObject *another_object);
 
 protected:
-    PNGImage _png_image;
+    
+    virtual Texture *GetTexture() = 0;
+
     b2Body *_body;
     PhysicsSimulator &_physics;
 };

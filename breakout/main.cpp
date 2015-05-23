@@ -14,7 +14,7 @@ Uint32 TimerCallback(Uint32 interval, void *param)
 
     userevent.type = SDL_USEREVENT;
     userevent.code = 0;
-    userevent.data1 = NULL;
+    userevent.data1 = (void *)interval;
     userevent.data2 = NULL;
 
     event.type = SDL_USEREVENT;
@@ -28,7 +28,7 @@ int main( int argc, char* argv[] )
 {
     GameArea game_area;
 
-    SDL_AddTimer(1, TimerCallback, &game_area);
+    SDL_AddTimer(15, TimerCallback, &game_area);
 
     bool quit = false;
     SDL_Event e;
@@ -45,7 +45,7 @@ int main( int argc, char* argv[] )
                 game_area.SetMouseX(e.motion.x);
                 break;
             case SDL_USEREVENT:
-                game_area.Step();
+                game_area.Step((Uint32)e.user.data1);
                 break;
             default:
                 break;

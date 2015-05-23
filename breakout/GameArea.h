@@ -9,6 +9,7 @@
 
 class Ball;
 class Paddle;
+class Piece;
 
 class Line : public IRenderElement
 {
@@ -43,11 +44,9 @@ public:
     inline float HeightMeter() {return _physics.Pixel2Meter(_height);}
     inline float MarginMeter() {return _physics.Pixel2Meter(GAME_AREA_MARGIN);}
 
-    void AddTexture(std::list<IRenderElement *> &elements);
-
     void SetMouseX(int x);
 
-    void Step();
+    void Step(Uint32 timer_value);
 
 protected:
     RenderEngine _engine;
@@ -57,6 +56,7 @@ protected:
     b2Body *_body, *_ground;
     int _width, _height;
     std::vector<Line *> _lines;
+    std::list<Piece *> _pieces;
 
     Ball *_ball;
     Paddle *_paddle;
