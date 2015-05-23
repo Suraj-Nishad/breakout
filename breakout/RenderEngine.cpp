@@ -110,17 +110,15 @@ bool RenderEngine::CreateWindow
     return true;
 }
 
-void RenderEngine::Render(const std::list<IRenderElement *> &textures)
+void RenderEngine::Render(const std::vector<IRenderElement *> &textures)
 {
     //Clear screen
     SDL_RenderClear(Handle());
 
     //Render textures to screen
-    for(std::list<IRenderElement *>::const_iterator texture_itr = textures.begin();
-        texture_itr != textures.end();
-        texture_itr++)
+    for(unsigned int i=0; i<textures.size(); i++)
     {
-        (*texture_itr)->Show(*this);
+        textures[i]->Show(*this);
     }
 
     //Update screen

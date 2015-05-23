@@ -16,7 +16,7 @@ protected:
     static PNGImage _g_piece_png;
 
 public:
-    Piece(RenderEngine &engine, PhysicsSimulator &physics, int x, int y, int max_width);
+    Piece(GameArea &game, int x, int y, int max_width);
 
     virtual ~Piece(void);
 

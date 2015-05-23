@@ -2,7 +2,7 @@
 #include "SDL.h"
 #include "SDL_image.h"
 #include <string>
-#include <list>
+#include <vector>
 
 class IRenderElement;
 
@@ -16,7 +16,7 @@ public:
                       int width = 640,
                       int height = 480);
 
-    void Render(const std::list<IRenderElement *> &textures);
+    void Render(const std::vector<IRenderElement *> &textures);
 
     inline SDL_Renderer *Handle() {return _renderer;}
 

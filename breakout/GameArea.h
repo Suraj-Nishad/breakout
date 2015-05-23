@@ -10,6 +10,7 @@
 class Ball;
 class Paddle;
 class Piece;
+class GroundLine;
 
 class Line : public IRenderElement
 {
@@ -48,18 +49,22 @@ public:
 
     void Step(Uint32 timer_value);
 
+    inline PhysicsSimulator &Physics() {return _physics;}
+    inline RenderEngine &Renderer() {return _engine;}
+
 protected:
     RenderEngine _engine;
     PhysicsSimulator _physics;
     PNGImage _background;
 
-    b2Body *_body, *_ground;
+    b2Body *_body;
     int _width, _height;
     std::vector<Line *> _lines;
-    std::list<Piece *> _pieces;
 
+    std::list<Piece *> _pieces;
     Ball *_ball;
     Paddle *_paddle;
+    GroundLine *_ground;
 };
 
 

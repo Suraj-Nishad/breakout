@@ -4,20 +4,20 @@
 #include "PhysicsSimulator.h"
 
 #include <string>
-#include <list>
+#include <vector>
 
 class Texture;
+class GameArea;
 
 class GameObject : public IContactObject
 {
 public:
-    GameObject(RenderEngine &engine, 
-               PhysicsSimulator &physics,
+    GameObject(GameArea &game,
                b2BodyType body_type);
 
     virtual ~GameObject(void);
 
-    void AddTexture(std::list<IRenderElement *> &elements);
+    void AddTexture(std::vector<IRenderElement *> &elements);
 
     virtual void BeginContact(IContactObject *another_object);
 
@@ -28,6 +28,6 @@ protected:
     virtual Texture *GetTexture() = 0;
 
     b2Body *_body;
-    PhysicsSimulator &_physics;
+    GameArea &_game;
 };
 

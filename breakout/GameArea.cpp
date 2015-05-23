@@ -3,6 +3,7 @@
 #include "Ball.h"
 #include "Paddle.h"
 #include "Piece.h"
+#include "GroundLine.h"
 
 Line::Line(PhysicsSimulator &_physics, int x0, int y0, int x1, int y1 )
 {
@@ -32,14 +33,10 @@ GameArea::GameArea() : _background("MCTestTaskBackground.png")
 
     b2BodyDef body_def;
     _body = _physics.World().CreateBody(&body_def);
-    _ground = _physics.World().CreateBody(&body_def);
 
-    _lines.push_back(new Line(_physics, GAME_AREA_MARGIN, GAME_AREA_MARGIN, _engine.Width()-GAME_AREA_MARGIN, GAME_AREA_MARGIN));
-    _lines.push_back(new Line(_physics, GAME_AREA_MARGIN, GAME_AREA_MARGIN, GAME_AREA_MARGIN, _engine.Height()-GAME_AREA_MARGIN));
-    _lines.push_back(new Line(_physics, _engine.Width()-GAME_AREA_MARGIN, _engine.Height()-GAME_AREA_MARGIN, _engine.Width()-GAME_AREA_MARGIN, GAME_AREA_MARGIN));
-
-    //ground line
-    _lines.push_back(new Line(_physics, _engine.Width()-GAME_AREA_MARGIN, _engine.Height()-GAME_AREA_MARGIN, GAME_AREA_MARGIN, _engine.Height()-GAME_AREA_MARGIN));
+    _lines.push_back(new Line(_physics, GAME_AREA_MARGIN-1, GAME_AREA_MARGIN-1, _engine.Width()-GAME_AREA_MARGIN, GAME_AREA_MARGIN-1));
+    _lines.push_back(new Line(_physics, _engine.Width()-GAME_AREA_MARGIN, GAME_AREA_MARGIN-1, _engine.Width()-GAME_AREA_MARGIN, _engine.Height()));
+    _lines.push_back(new Line(_physics, GAME_AREA_MARGIN-1, GAME_AREA_MARGIN-1, GAME_AREA_MARGIN-1, _engine.Height()));
 
     b2EdgeShape edge;
     b2FixtureDef fixture;
@@ -49,16 +46,14 @@ GameArea::GameArea() : _background("MCTestTaskBackground.png")
     for(unsigned int i=0; i<_lines.size(); i++)
     {
         edge.Set(_lines[i]->Point0(), _lines[i]->Point1());
-        if(i!=3)
-            _body->CreateFixture(&fixture);
-        else
-            _ground->CreateFixture(&fixture);
+        _body->CreateFixture(&fixture);
     }
 
-    _ball = new Ball(_engine, _physics);
-    _paddle = new Paddle(_engine, _physics, *this);
+    
+    _ground = new GroundLine(*this);
+     _paddle = new Paddle(*this);
 
-
+    _ball = new Ball(*this);
     int x, y, max_width;
     for(int i=0; i<4; i++)
     {
@@ -68,7 +63,7 @@ GameArea::GameArea() : _background("MCTestTaskBackground.png")
         
         while(max_width > 0) 
         {
-            Piece *piece = new Piece(_engine, _physics, x, y, max_width);
+            Piece *piece = new Piece(*this, x, y, max_width);
             x += piece->Width();
             max_width -= piece->Width();
             _pieces.push_back(piece);
@@ -82,6 +77,8 @@ GameArea::~GameArea(void)
     {
         delete _lines[i];
     }
+    if(_ground)
+        delete _ground;
     if(_ball)
         delete _ball;
     if(_paddle)
@@ -93,13 +90,14 @@ void GameArea::Step(Uint32 timer_value)
 {
     _physics.Step((float)timer_value/1000);
 
-    std::list<IRenderElement *> textures;    
-    
-    for(unsigned int i=0; i<_lines.size(); i++)
+    if(_ball != NULL && _ball->Destroyed())
     {
-        textures.push_back(_lines[i]);
+        delete _ball;
+        _ball = NULL;
     }
 
+    std::vector<IRenderElement *> textures;    
+    
     textures.push_back(&_background);
 
     std::list<Piece *>::iterator itr = _pieces.begin();
@@ -117,8 +115,13 @@ void GameArea::Step(Uint32 timer_value)
         }        
     }
 
-    _ball->AddTexture(textures);
+    if(_ball) _ball->AddTexture(textures);
     _paddle->AddTexture(textures);
+
+    for(unsigned int i=0; i<_lines.size(); i++)
+    {
+        textures.push_back(_lines[i]);
+    }
 
     _engine.Render(textures);
 

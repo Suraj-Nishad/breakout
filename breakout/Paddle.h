@@ -7,7 +7,7 @@
 class Paddle : public GameObject
 {
 public:
-    Paddle(RenderEngine &engine, PhysicsSimulator &physics, GameArea &game_area);
+    Paddle(GameArea &game_area);
 
     virtual ~Paddle(void);
 

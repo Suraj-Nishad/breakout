@@ -6,19 +6,22 @@
 class Ball : public GameObject
 {
 public:
-    Ball(RenderEngine &engine, PhysicsSimulator &physics);
+    Ball(GameArea &game);
 
     virtual ~Ball(void);
 
-    void SetVelocity(float velocity, float angle);
+    inline bool Destroyed() {return _destroyed;}
 
-    void GetVelocity(float &velocity, float &angle);
+    inline void Destroyed(bool value) {_destroyed = value;}
 
-    void EndContact(IContactObject *another_object);
+protected:
 
     virtual Texture * GetTexture();
 
-protected:
+    virtual void EndContact( IContactObject *another_object );
+
+
+    bool _destroyed;
 
     PNGImage _ball_png;
 };

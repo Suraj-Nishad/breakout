@@ -1,18 +1,18 @@
 #include "Paddle.h"
+#include "GameArea.h"
 
-Paddle::Paddle
-(
-    RenderEngine &engine, 
-    PhysicsSimulator &physics,
-    GameArea &game_area
-) : GameObject(engine, physics, b2_kinematicBody), _paddle_png("MCTestTaskPaddle.png")
+Paddle::Paddle(GameArea &game_area) : GameObject(game_area, b2_kinematicBody), _paddle_png("MCTestTaskPaddle.png")
 {
-    _paddle_png.Load(engine);
+    _paddle_png.Load(_game.Renderer());
     _paddle_png.SetColor(255,0,0);
-    _body->SetTransform(b2Vec2(physics.Pixel2Meter(engine.Width()/2), physics.Pixel2Meter(engine.Height()-_paddle_png.Height()-50)), _body->GetAngle());
+    _body->SetTransform(b2Vec2(_game.Physics().Pixel2Meter(_game.Renderer().Width()/2), _game.Physics().Pixel2Meter(_game.Renderer().Height()-_paddle_png.Height()-50)), _body->GetAngle());
     b2FixtureDef fixture;
     b2PolygonShape rect;
-    rect.SetAsBox(physics.Pixel2Meter(_paddle_png.Width()/2), physics.Pixel2Meter(_paddle_png.Height()/2));
+    rect.SetAsBox(_game.Physics().Pixel2Meter(_paddle_png.Width()/2), _game.Physics().Pixel2Meter(_paddle_png.Height()/2));
+    //HACK: We don't really want a perfect box to avoid horizontal movement.
+    rect.m_vertices[0].x *= 1.05;
+    rect.m_vertices[3].x *= 1.05;
+
     fixture.shape = &rect;
     fixture.density = 0;
     fixture.restitution = 1;
@@ -33,7 +33,7 @@ void Paddle::SetX(int x)
     if(x>_max_x)
         x = _max_x;
 
-    _body->SetTransform(b2Vec2(_physics.Pixel2Meter(x), _body->GetPosition().y), _body->GetAngle());
+    _body->SetTransform(b2Vec2(_game.Physics().Pixel2Meter(x), _body->GetPosition().y), _body->GetAngle());
 }
 
 Texture * Paddle::GetTexture()

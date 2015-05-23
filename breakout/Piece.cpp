@@ -1,5 +1,5 @@
 #include "Piece.h"
-
+#include "GameArea.h"
 PNGImage Piece::_g_piece_png("MCTestTaskPiece.png");
 
 void Piece::LoadPNG( RenderEngine &engine )
@@ -9,12 +9,11 @@ void Piece::LoadPNG( RenderEngine &engine )
 
 Piece::Piece
 (
-    RenderEngine &engine, 
-    PhysicsSimulator &physics, 
+    GameArea &game, 
     int x, 
     int y,
     int max_width
-) : GameObject(engine, physics, b2_staticBody), _piece_texture(_g_piece_png)
+) : GameObject(game, b2_staticBody), _piece_texture(_g_piece_png)
 {
     int width = rand() % (2*PNGWidth());
     if(width < PNGWidth()/2)
@@ -24,10 +23,14 @@ Piece::Piece
 
     _piece_texture.Width(width);
     _piece_texture.SetColor(rand() % 255, rand() % 255, rand() % 255);
-    _body->SetTransform(b2Vec2(physics.Pixel2Meter(x+_piece_texture.Width()/2), physics.Pixel2Meter(y+_piece_texture.Height()/2)), _body->GetAngle());
+    _body->SetTransform(b2Vec2(_game.Physics().Pixel2Meter(x+_piece_texture.Width()/2), _game.Physics().Pixel2Meter(y+_piece_texture.Height()/2)), _body->GetAngle());
     b2FixtureDef fixture;
     b2PolygonShape rect;
-    rect.SetAsBox(physics.Pixel2Meter(_piece_texture.Width()/2), physics.Pixel2Meter(_piece_texture.Height()/2));
+    rect.SetAsBox(_game.Physics().Pixel2Meter(_piece_texture.Width()/2), _game.Physics().Pixel2Meter(_piece_texture.Height()/2));
+    //HACK: We don't really want a perfect box to avoid horizontal movement.
+    rect.m_vertices[0].x *= 1.05;
+    rect.m_vertices[3].x *= 1.05;
+    
     fixture.shape = &rect;
     fixture.density = 0;
     fixture.restitution = 1;
