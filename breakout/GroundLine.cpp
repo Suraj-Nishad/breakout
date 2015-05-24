@@ -25,12 +25,21 @@ GroundLine::~GroundLine(void)
     _game.Physics().World().DestroyBody(_ground);
 }
 
-void GroundLine::BeginContact( IContactObject *another_object )
+void GroundLine::BeginContact( IGameObject *another_object )
 {
     //Whatever touch gound line it is destroyed
     another_object->Destroy();
 }
 
-void GroundLine::EndContact( IContactObject *another_object )
+void GroundLine::EndContact( IGameObject *another_object )
 {
+}
+
+void GroundLine::Destroy()
+{
+}
+
+bool GroundLine::IsDestroyed()
+{
+    return false;
 }

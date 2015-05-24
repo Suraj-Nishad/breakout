@@ -22,7 +22,7 @@ protected:
 
     virtual Texture * GetTexture();
 
-    virtual void EndContact( IContactObject *another_object );
+    virtual void EndContact( IGameObject *another_object );
 
     void CheckVelocity();
 

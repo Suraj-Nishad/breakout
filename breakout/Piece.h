@@ -12,7 +12,7 @@ public:
 
     static int PNGWidth() {return _g_piece_png.Width();}
 
-protected:
+public:
     static PNGImage _g_piece_png;
 
 public:
@@ -22,10 +22,10 @@ public:
 
     int Width() {return _piece_texture.Width();}
 
-protected:
     virtual Texture * GetTexture();
 
-    virtual void EndContact( IContactObject *another_object );
+protected:
+    virtual void EndContact( IGameObject *another_object );
 
     WeakCopyTexture _piece_texture;
 };

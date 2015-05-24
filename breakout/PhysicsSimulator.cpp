@@ -22,26 +22,26 @@ void PhysicsSimulator::Step(float rate)
 void PhysicsSimulator::Mapb2ContactToIContactObject
 (
     b2Contact *contact, 
-    IContactObject **obj_a, 
-    IContactObject **obj_b
+    IGameObject **obj_a, 
+    IGameObject **obj_b
 )
 {
     void *user_data = contact->GetFixtureA()->GetBody()->GetUserData();
     if(user_data != NULL)
-        *obj_a = static_cast<IContactObject *>(user_data);
+        *obj_a = static_cast<IGameObject *>(user_data);
     else
         *obj_a = NULL;
 
     user_data = contact->GetFixtureB()->GetBody()->GetUserData();
     if(user_data != NULL)
-        *obj_b = static_cast<IContactObject *>(user_data);
+        *obj_b = static_cast<IGameObject *>(user_data);
     else
         *obj_b = NULL;
 }
 
 void PhysicsSimulator::BeginContact( b2Contact* contact )
 {
-    IContactObject *obj_a = NULL, *obj_b = NULL;
+    IGameObject *obj_a = NULL, *obj_b = NULL;
     Mapb2ContactToIContactObject(contact, &obj_a, &obj_b);
     if(obj_a != NULL && obj_b != NULL)
     {
@@ -52,7 +52,7 @@ void PhysicsSimulator::BeginContact( b2Contact* contact )
 
 void PhysicsSimulator::EndContact(b2Contact* contact)
 {
-    IContactObject *obj_a = NULL, *obj_b = NULL;
+    IGameObject *obj_a = NULL, *obj_b = NULL;
     Mapb2ContactToIContactObject(contact, &obj_a, &obj_b);
     if(obj_a != NULL && obj_b != NULL)
     {

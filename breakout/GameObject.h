@@ -9,7 +9,7 @@
 class Texture;
 class GameControler;
 
-class GameObject : public IContactObject
+class GameObject : public IGameObject
 {
 public:
     GameObject(GameControler &game,
@@ -19,13 +19,13 @@ public:
 
     void AddTexture(std::vector<IRenderElement *> &elements);
 
-    virtual void BeginContact(IContactObject *another_object);
+    virtual void BeginContact(IGameObject *another_object);
 
-    virtual void EndContact(IContactObject *another_object);
+    virtual void EndContact(IGameObject *another_object);
 
     virtual void Destroy();
 
-    virtual void IsDestroyed();
+    virtual bool IsDestroyed();
 
 protected:
     

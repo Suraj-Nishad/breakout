@@ -2,16 +2,20 @@
 #include "physicssimulator.h"
 
 class GameControler;
-class GroundLine : public IContactObject
+class GroundLine : public IGameObject
 {
 public:
     GroundLine(GameControler &game);
 
     virtual ~GroundLine(void);
 
-    virtual void BeginContact( IContactObject *another_object );
+    virtual void BeginContact( IGameObject *another_object );
 
-    virtual void EndContact( IContactObject *another_object );
+    virtual void EndContact( IGameObject *another_object );
+
+    virtual void Destroy();
+
+    virtual bool IsDestroyed();
 
 protected:
     b2Body *_ground;

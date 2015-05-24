@@ -1,7 +1,7 @@
 #pragma once
 #include "Box2D/Box2D.h"
 
-class IContactObject;
+class IGameObject;
 class PhysicsSimulator : public b2ContactListener
 {
 public:
@@ -21,23 +21,23 @@ public:
 
 protected:
 
-    void Mapb2ContactToIContactObject(b2Contact *contact, IContactObject **obj_a, IContactObject **obj_b);
+    void Mapb2ContactToIContactObject(b2Contact *contact, IGameObject **obj_a, IGameObject **obj_b);
 
     b2World *_world;
 };
 
-class IContactObject
+class IGameObject
 {
 public:
-    virtual void BeginContact(IContactObject *another_object) = 0;
+    virtual void BeginContact(IGameObject *another_object) = 0;
 
-    virtual void EndContact(IContactObject *another_object) = 0;
+    virtual void EndContact(IGameObject *another_object) = 0;
 
     virtual void Destroy() = 0;
 
-    virtual void IsDestroyed() = 0;
+    virtual bool IsDestroyed() = 0;
 
 protected:
-    IContactObject() {}
-    virtual ~IContactObject() {};
+    IGameObject() {}
+    virtual ~IGameObject() {};
 };

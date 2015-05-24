@@ -46,7 +46,7 @@ Texture * Piece::GetTexture()
     return &_piece_texture;
 }
 
-void Piece::EndContact( IContactObject *another_object )
+void Piece::EndContact( IGameObject *another_object )
 {
     //only ball contacts a piece
     Destroy();

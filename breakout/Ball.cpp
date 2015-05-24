@@ -21,7 +21,7 @@ Ball::~Ball(void)
 {
 }
 
-void Ball::EndContact( IContactObject *another_object )
+void Ball::EndContact( IGameObject *another_object )
 {
     CheckVelocity();
 }

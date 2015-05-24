@@ -22,11 +22,11 @@ GameObject::~GameObject(void)
     _game.Physics().World().DestroyBody(_body);
 }
 
-void GameObject::BeginContact( IContactObject *another_object )
+void GameObject::BeginContact( IGameObject *another_object )
 {
 }
 
-void GameObject::EndContact(IContactObject *another_object)
+void GameObject::EndContact(IGameObject *another_object)
 {
 
 }
@@ -46,7 +46,7 @@ void GameObject::Destroy()
     _destroyed = true;
 }
 
-void GameObject::IsDestroyed()
+bool GameObject::IsDestroyed()
 {
     return _destroyed;
 }
