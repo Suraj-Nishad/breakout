@@ -63,8 +63,8 @@
     </Link>
     <PostBuildEvent>
       <Command>xcopy /y "$(SolutionDir)SDL2-2.0.3\lib\x86\*.dll" "$(OutDir)"
-xcopy /y "$(SolutionDir)images\*.*" "$(OutDir)"
-xcopy /y "$(SolutionDir)sounds\*.*" "$(OutDir)"</Command>
+xcopy /y "$(SolutionDir)images\*.png" "$(OutDir)"
+xcopy /y "$(SolutionDir)sounds\*.aif" "$(OutDir)"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -89,8 +89,8 @@ xcopy /y "$(SolutionDir)sounds\*.*" "$(OutDir)"</Command>
     </Link>
     <PostBuildEvent>
       <Command>xcopy /y "$(SolutionDir)SDL2-2.0.3\lib\x86\*.dll" "$(OutDir)"
-xcopy /y "$(SolutionDir)images\*.*" "$(OutDir)"
-xcopy /y "$(SolutionDir)sounds\*.*" "$(OutDir)"</Command>
+xcopy /y "$(SolutionDir)images\*.png" "$(OutDir)"
+xcopy /y "$(SolutionDir)sounds\*.aif" "$(OutDir)"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
