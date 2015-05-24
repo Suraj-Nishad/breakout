@@ -20,6 +20,8 @@ public:
 
     void Stop();
 
+    bool NotMoving();
+
 protected:
 
     virtual Texture * GetTexture();

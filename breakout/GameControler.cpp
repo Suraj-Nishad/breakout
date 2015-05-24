@@ -72,11 +72,14 @@ void GameControler::Step(Uint32 timer_value)
 {
     _physics.Step((float)timer_value/1000);
 
-    if(_ball != NULL && _ball->Destroyed())
+    if(_game_state == GAME_STATE_PLAYING && _ball != NULL)
     {
-        GameOver();
-
+        if(_ball->Destroyed())
+            GameOver();
+        else if(_ball->NotMoving())
+            _ball->Start();
     }
+    
 
     std::vector<IRenderElement *> textures;    
     

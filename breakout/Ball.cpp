@@ -76,3 +76,9 @@ void Ball::CheckVelocity()
         _body->SetLinearVelocity(b2Vec2((float)x, (float)y));
     }
 }
+
+bool Ball::NotMoving()
+{
+    const b2Vec2 &v = _body->GetLinearVelocity();
+    return v.x == 0.0 && v.y == 0.0;
+}
