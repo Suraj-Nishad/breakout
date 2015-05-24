@@ -52,6 +52,12 @@ int main( int argc, char* argv[] )
             case SDL_USEREVENT:
                 game.Step((Uint32)e.user.data1);
                 break;
+            case SDL_KEYUP:
+                if(e.key.keysym.sym == SDLK_ESCAPE)
+                {
+                    game.GameOver();
+                }
+                break;
             default:
                 break;
             }

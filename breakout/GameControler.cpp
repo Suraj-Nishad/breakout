@@ -201,8 +201,11 @@ void GameControler::GameWin()
 
 void GameControler::GameOver()
 {
-    delete _ball;
-    _ball = NULL;
-    _game_state = GAME_STATE_OVER;
-    Music().PlayGameOver();
+    if(_game_state != GAME_STATE_WIN || _game_state != GAME_STATE_OVER)
+    {
+        delete _ball;
+        _ball = NULL;
+        _game_state = GAME_STATE_OVER;
+        Music().PlayGameOver();
+    }
 }
