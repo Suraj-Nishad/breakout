@@ -169,6 +169,8 @@ void GameControler::CreateGameObjects()
             _pieces.push_back(piece);
         }
     }
+
+    Music().PlayGameStart();
 }
 
 void GameControler::MouseClick()
@@ -200,4 +202,5 @@ void GameControler::GameOver()
     delete _ball;
     _ball = NULL;
     _game_state = GAME_STATE_OVER;
+    Music().PlayGameOver();
 }

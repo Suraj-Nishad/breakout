@@ -51,4 +51,6 @@ void Piece::EndContact( IContactObject *another_object )
 {
     //only ball contacts a piece
     _destroyed = true;
+
+    _game.Music().PlayBounce();
 }

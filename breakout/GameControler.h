@@ -2,6 +2,7 @@
 
 #include "PhysicsSimulator.h"
 #include "RenderEngine.h"
+#include "MusicPlayer.h"
 #include "Texture.h"
 #include "PNGImage.h"
 #include <vector>
@@ -69,10 +70,12 @@ public:
 
     inline PhysicsSimulator &Physics() {return _physics;}
     inline RenderEngine &Renderer() {return _engine;}
+    inline MusicPlayer &Music() {return _music;}
 
 protected:
     RenderEngine _engine;
     PhysicsSimulator _physics;
+    MusicPlayer _music;
     PNGImage _background;
 
     b2Body *_body;

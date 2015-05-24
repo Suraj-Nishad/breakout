@@ -24,7 +24,6 @@ Ball::~Ball(void)
 void Ball::EndContact( IContactObject *another_object )
 {
     CheckVelocity();
-
 }
 
 Texture * Ball::GetTexture()
