@@ -1,8 +1,8 @@
 #include "Ball.h"
-#include "GameArea.h"
+#include "GameControler.h"
 #include <math.h>
 
-Ball::Ball(GameArea &game) : GameObject(game, b2_dynamicBody), _ball_png("ball.png")
+Ball::Ball(GameControler &game) : GameObject(game, b2_dynamicBody), _ball_png("ball.png")
 {
     _ball_png.Load(game.Renderer());
 

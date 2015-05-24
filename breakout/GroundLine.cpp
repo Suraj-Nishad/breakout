@@ -1,8 +1,8 @@
 #include "GroundLine.h"
-#include "GameArea.h"
+#include "GameControler.h"
 #include "Ball.h"
 
-GroundLine::GroundLine(GameArea &game) : _game(game)
+GroundLine::GroundLine(GameControler &game) : _game(game)
 {
     b2BodyDef body_def;
     body_def.type = b2_staticBody;

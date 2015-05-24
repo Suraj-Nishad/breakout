@@ -7,12 +7,12 @@
 #include <vector>
 
 class Texture;
-class GameArea;
+class GameControler;
 
 class GameObject : public IContactObject
 {
 public:
-    GameObject(GameArea &game,
+    GameObject(GameControler &game,
                b2BodyType body_type);
 
     virtual ~GameObject(void);
@@ -28,6 +28,6 @@ protected:
     virtual Texture *GetTexture() = 0;
 
     b2Body *_body;
-    GameArea &_game;
+    GameControler &_game;
 };
 

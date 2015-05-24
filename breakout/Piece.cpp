@@ -1,5 +1,5 @@
 #include "Piece.h"
-#include "GameArea.h"
+#include "GameControler.h"
 PNGImage Piece::_g_piece_png("MCTestTaskPiece.png");
 
 void Piece::LoadPNG( RenderEngine &engine )
@@ -9,7 +9,7 @@ void Piece::LoadPNG( RenderEngine &engine )
 
 Piece::Piece
 (
-    GameArea &game, 
+    GameControler &game, 
     int x, 
     int y,
     int max_width

@@ -1,4 +1,4 @@
-#include "GameArea.h"
+#include "GameControler.h"
 #include "Texture.h"
 #include "Ball.h"
 #include "Paddle.h"
@@ -22,7 +22,7 @@ void Line::Show( RenderEngine &_engine )
     SDL_RenderDrawLine( _engine.Handle(), _x0, _y0, _x1, _y1);
 }
 
-GameArea::GameArea() : _background("MCTestTaskBackground.png")
+GameControler::GameControler() : _background("MCTestTaskBackground.png")
 {
     _engine.CreateWindow("Breakout", 500, 700);
     Piece::LoadPNG(_engine);
@@ -54,7 +54,7 @@ GameArea::GameArea() : _background("MCTestTaskBackground.png")
     CreateGameObjects();
 }
 
-GameArea::~GameArea(void)
+GameControler::~GameControler(void)
 {
     for(unsigned int i=0; i<_lines.size(); i++)
     {
@@ -68,7 +68,7 @@ GameArea::~GameArea(void)
     _physics.World().DestroyBody(_body);
 }
 
-void GameArea::Step(Uint32 timer_value)
+void GameControler::Step(Uint32 timer_value)
 {
     _physics.Step((float)timer_value/1000);
 
@@ -116,7 +116,7 @@ void GameArea::Step(Uint32 timer_value)
 
 }
 
-void GameArea::SetMouseX( int x )
+void GameControler::SetMouseX( int x )
 {
     _paddle->SetX(x);
 
@@ -128,7 +128,7 @@ void GameArea::SetMouseX( int x )
     }
 }
 
-void GameArea::DestroyGameObjects()
+void GameControler::DestroyGameObjects()
 {
     for(std::list<Piece *>::iterator itr = _pieces.begin();
         itr != _pieces.end();
@@ -145,7 +145,7 @@ void GameArea::DestroyGameObjects()
     _paddle = NULL;
 }
 
-void GameArea::CreateGameObjects()
+void GameControler::CreateGameObjects()
 {
     _game_state = GAME_STATE_NOT_PLAYING;
     _paddle = new Paddle(*this);
@@ -171,7 +171,7 @@ void GameArea::CreateGameObjects()
     }
 }
 
-void GameArea::MouseClick()
+void GameControler::MouseClick()
 {
     switch(_game_state)
     {
@@ -189,13 +189,13 @@ void GameArea::MouseClick()
     }
 }
 
-void GameArea::GameWin()
+void GameControler::GameWin()
 {
     _ball->Stop();
     _game_state = GAME_STATE_WIN;
 }
 
-void GameArea::GameOver()
+void GameControler::GameOver()
 {
     delete _ball;
     _ball = NULL;

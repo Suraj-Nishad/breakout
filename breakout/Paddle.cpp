@@ -1,7 +1,7 @@
 #include "Paddle.h"
-#include "GameArea.h"
+#include "GameControler.h"
 
-Paddle::Paddle(GameArea &game_area) : GameObject(game_area, b2_kinematicBody), _paddle_png("MCTestTaskPaddle.png")
+Paddle::Paddle(GameControler &game) : GameObject(game, b2_kinematicBody), _paddle_png("MCTestTaskPaddle.png")
 {
     _paddle_png.Load(_game.Renderer());
     _paddle_png.SetColor(255,0,0);
@@ -18,8 +18,8 @@ Paddle::Paddle(GameArea &game_area) : GameObject(game_area, b2_kinematicBody), _
     fixture.restitution = 1;
     _body->CreateFixture(&fixture);
 
-    _min_x = game_area.MarginPixel() + _paddle_png.Width()/2;
-    _max_x = game_area.MarginPixel() + game_area.WidthPixel() - _paddle_png.Width()/2;
+    _min_x = game.MarginPixel() + _paddle_png.Width()/2;
+    _max_x = game.MarginPixel() + game.WidthPixel() - _paddle_png.Width()/2;
 }
 
 Paddle::~Paddle(void)

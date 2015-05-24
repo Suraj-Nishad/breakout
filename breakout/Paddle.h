@@ -1,13 +1,13 @@
 #pragma once
 
-#include "GameArea.h"
+#include "GameControler.h"
 #include "GameObject.h"
 #include "PNGImage.h"
 
 class Paddle : public GameObject
 {
 public:
-    Paddle(GameArea &game_area);
+    Paddle(GameControler &game);
 
     virtual ~Paddle(void);
 

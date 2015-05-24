@@ -1,11 +1,11 @@
 #pragma once
 #include "physicssimulator.h"
 
-class GameArea;
+class GameControler;
 class GroundLine : public IContactObject
 {
 public:
-    GroundLine(GameArea &game);
+    GroundLine(GameControler &game);
 
     virtual ~GroundLine(void);
 
@@ -15,7 +15,7 @@ public:
 
 protected:
     b2Body *_ground;
-    GameArea &_game;
+    GameControler &_game;
 
 };
 

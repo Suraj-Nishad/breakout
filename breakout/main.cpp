@@ -3,7 +3,7 @@
 #include "RenderEngine.h"
 #include "PNGImage.h"
 #include "PhysicsSimulator.h"
-#include "GameArea.h"
+#include "GameControler.h"
 #include "Ball.h"
 #include "Paddle.h"
 
@@ -26,11 +26,11 @@ Uint32 TimerCallback(Uint32 interval, void *param)
 
 int main( int argc, char* argv[] )
 {
-    GameArea game_area;
+    GameControler game;
 
     srand(SDL_GetTicks());
 
-    SDL_AddTimer(15, TimerCallback, &game_area);
+    SDL_AddTimer(15, TimerCallback, &game);
 
     bool quit = false;
     SDL_Event e;
@@ -44,13 +44,13 @@ int main( int argc, char* argv[] )
                 quit = true;
                 break;
             case SDL_MOUSEMOTION:
-                game_area.SetMouseX(e.motion.x);
+                game.SetMouseX(e.motion.x);
                 break;
             case SDL_MOUSEBUTTONUP:
-                game_area.MouseClick();
+                game.MouseClick();
                 break;
             case SDL_USEREVENT:
-                game_area.Step((Uint32)e.user.data1);
+                game.Step((Uint32)e.user.data1);
                 break;
             default:
                 break;

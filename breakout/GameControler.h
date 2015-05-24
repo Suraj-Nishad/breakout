@@ -39,14 +39,14 @@ typedef enum
     GAME_STATE_WIN,
     GAME_STATE_OVER
 } GAME_STATE;
-class GameArea
+class GameControler
 {
 public:
-    GameArea();
+    GameControler();
 
     void CreateGameObjects();
 
-    virtual ~GameArea(void);
+    virtual ~GameControler(void);
 
     void DestroyGameObjects();
 

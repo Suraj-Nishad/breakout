@@ -6,7 +6,7 @@
 class Ball : public GameObject
 {
 public:
-    Ball(GameArea &game);
+    Ball(GameControler &game);
 
     virtual ~Ball(void);
 

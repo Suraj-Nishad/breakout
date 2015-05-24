@@ -1,11 +1,11 @@
 #include "GameObject.h"
 #include "Texture.h"
-#include "GameArea.h"
+#include "GameControler.h"
 #include "PhysicsSimulator.h"
 
 GameObject::GameObject
 (
-    GameArea &game, 
+    GameControler &game, 
     b2BodyType body_type
 ) : _game(game)
 {
