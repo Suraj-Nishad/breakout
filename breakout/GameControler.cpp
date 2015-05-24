@@ -74,7 +74,7 @@ void GameControler::Step(Uint32 timer_value)
 
     if(_game_state == GAME_STATE_PLAYING && _ball != NULL)
     {
-        if(_ball->Destroyed())
+        if(_ball->IsDestroyed())
             GameOver();
         else if(_ball->NotMoving())
             _ball->Start();
@@ -88,7 +88,7 @@ void GameControler::Step(Uint32 timer_value)
     std::list<Piece *>::iterator itr = _pieces.begin();
     while(itr != _pieces.end())
     {
-        if((*itr)->Destroyed() == false)
+        if((*itr)->IsDestroyed() == false)
         {
             (*itr)->AddTexture(textures);
             itr++;
@@ -103,7 +103,6 @@ void GameControler::Step(Uint32 timer_value)
     if(_pieces.empty())
     {
         GameWin();
-
     }
 
     if(_ball) 

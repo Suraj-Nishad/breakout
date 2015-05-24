@@ -22,15 +22,12 @@ public:
 
     int Width() {return _piece_texture.Width();}
 
-    inline bool Destroyed() {return _destroyed;}
-
 protected:
     virtual Texture * GetTexture();
 
     virtual void EndContact( IContactObject *another_object );
 
     WeakCopyTexture _piece_texture;
-    bool _destroyed;
 };
 
 

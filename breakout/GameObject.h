@@ -23,9 +23,15 @@ public:
 
     virtual void EndContact(IContactObject *another_object);
 
+    virtual void Destroy();
+
+    virtual void IsDestroyed();
+
 protected:
     
     virtual Texture *GetTexture() = 0;
+
+    bool _destroyed;
 
     b2Body *_body;
     GameControler &_game;

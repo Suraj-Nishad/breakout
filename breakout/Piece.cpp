@@ -35,7 +35,6 @@ Piece::Piece
     fixture.density = 0;
     fixture.restitution = 1;
     _body->CreateFixture(&fixture);
-    _destroyed = false;
 }
 
 Piece::~Piece(void)
@@ -50,7 +49,7 @@ Texture * Piece::GetTexture()
 void Piece::EndContact( IContactObject *another_object )
 {
     //only ball contacts a piece
-    _destroyed = true;
+    Destroy();
 
     _game.Music().PlayBounce();
 }

@@ -27,8 +27,8 @@ GroundLine::~GroundLine(void)
 
 void GroundLine::BeginContact( IContactObject *another_object )
 {
-    //another object must be a ball
-    static_cast<Ball *>(another_object)->Destroyed(true);
+    //Whatever touch gound line it is destroyed
+    another_object->Destroy();
 }
 
 void GroundLine::EndContact( IContactObject *another_object )

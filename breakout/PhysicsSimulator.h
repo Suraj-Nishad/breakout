@@ -33,6 +33,10 @@ public:
 
     virtual void EndContact(IContactObject *another_object) = 0;
 
+    virtual void Destroy() = 0;
+
+    virtual void IsDestroyed() = 0;
+
 protected:
     IContactObject() {}
     virtual ~IContactObject() {};

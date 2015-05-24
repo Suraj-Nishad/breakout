@@ -13,6 +13,7 @@ GameObject::GameObject
     body_def.type = body_type;
     body_def.userData = this;
     _body = _game.Physics().World().CreateBody(&body_def);
+    _destroyed = false;
 }
 
 
@@ -38,4 +39,14 @@ void GameObject::AddTexture( std::vector<IRenderElement *> &elements )
 
     this_texture->SetPosition(x, y);
     elements.push_back(this_texture);
+}
+
+void GameObject::Destroy()
+{
+    _destroyed = true;
+}
+
+void GameObject::IsDestroyed()
+{
+    return _destroyed;
 }
