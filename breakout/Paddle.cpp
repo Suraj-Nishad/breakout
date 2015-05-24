@@ -11,6 +11,8 @@ Paddle::Paddle(GameControler &game) : GameObject(game, b2_kinematicBody), _paddl
     rect.SetAsBox(_game.Physics().Pixel2Meter(_paddle_png.Width()/2), _game.Physics().Pixel2Meter(_paddle_png.Height()/2));
     //HACK: We don't really want a perfect box to avoid horizontal movement.
     rect.m_vertices[0].x *= 0.8;
+    rect.m_vertices[1].x *= 1.1;
+    rect.m_vertices[2].x *= 1.1;
     rect.m_vertices[3].x *= 0.8;
 
     fixture.shape = &rect;
