@@ -35,11 +35,15 @@ RenderEngine::RenderEngine()
 		SDL_Quit();
 		throw std::runtime_error(ss.str());
 	}
+
+    SDL_ShowCursor(SDL_DISABLE);
 }
 
 
 RenderEngine::~RenderEngine(void)
 {
+    SDL_ShowCursor(SDL_ENABLE);
+
     if(_renderer != NULL)
         SDL_DestroyRenderer(_renderer);
 
