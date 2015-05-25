@@ -37,7 +37,7 @@ void Bonus::BeginContact( IGameObject *another_object )
 {
     if(another_object->Type() == GAME_OBJECT_PADDLE)
     {
-        int n = rand() % 2;
+        int n = rand() % 5;
         if(n == 0)
             _bonus_type = BONUS_EXTRA_LIFE;
         else
