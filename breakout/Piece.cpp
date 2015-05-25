@@ -34,7 +34,12 @@ Piece::Piece
     fixture.shape = &rect;
     fixture.density = 0;
     fixture.restitution = 1;
+    fixture.filter.categoryBits = GAME_OBJECT_PIECE;
+    fixture.filter.maskBits = GAME_OBJECT_BALL;
+    
     _body->CreateFixture(&fixture);
+
+    _has_bonus = (rand() % 10) == 0;
 }
 
 Piece::~Piece(void)

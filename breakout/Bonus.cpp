@@ -4,19 +4,21 @@
 
 Bonus::Bonus(GameControler &game, Piece &piece) : TextureGameObject(game, b2_dynamicBody), _piece_texture(Piece::_g_piece_png)
 {
+    _bonus_type = BONUS_NONE; //no bonus until this collide with paddle
     _piece_texture.CopyCharacteristics(*piece.GetTexture());
-    _piece_texture.Width(Piece::Image().Width());
     _body->SetTransform(piece._body->GetPosition(), piece._body->GetAngle());
 
-    //create a tiny circle that represents the bonus falling down.
     b2FixtureDef fixture;
-    b2CircleShape circle;
-    circle.m_radius = 0.01;
-    fixture.shape = &circle;
+    b2PolygonShape rect;
+    rect.SetAsBox(_game.Physics().Pixel2Meter(_piece_texture.Width()/2), _game.Physics().Pixel2Meter(_piece_texture.Height()/2));
+
+    fixture.shape = &rect;
     fixture.density = 0;
     fixture.restitution = 1;
 
-    _body->CreateFixture(&fixture);
+    fixture.filter.categoryBits = GAME_OBJECT_BONUS;
+    fixture.filter.maskBits = GAME_OBJECT_GROUND | GAME_OBJECT_PADDLE;
+
     _body->CreateFixture(&fixture);
     _body->SetLinearVelocity(b2Vec2(0.0, 20.0));
 }
@@ -33,9 +35,19 @@ Texture * Bonus::GetTexture()
 
 void Bonus::BeginContact( IGameObject *another_object )
 {
-    Destroy();
+    if(another_object->Type() == GAME_OBJECT_PADDLE)
+    {
+        _bonus_type = BONUS_MULTIPLE_BALLS;
+        Destroy();
+    }
 }
 
+void Bonus::EndContact(IGameObject *another_object)
+{
+    if(IsDestroyed() == false)
+        _body->SetLinearVelocity(b2Vec2(0.0, 20.0));
+
+}
 GAME_OBJECT_TYPE Bonus::Type()
 {
     return GAME_OBJECT_BONUS;

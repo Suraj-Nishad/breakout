@@ -45,7 +45,8 @@ GameControler::GameControler() : _background("MCTestTaskBackground.png")
     b2FixtureDef fixture;
     fixture.shape = &edge;
     fixture.friction = 0;
-
+    fixture.filter.categoryBits = GAME_OBJECT_GROUND; //this is not a ground line but act like a ground
+    fixture.filter.maskBits = GAME_OBJECT_BALL; //only ball collide with this.
     for(unsigned int i=0; i<_lines.size(); i++)
     {
         edge.Set(_lines[i]->Point0(), _lines[i]->Point1());
@@ -73,17 +74,30 @@ GameControler::~GameControler(void)
 
 void GameControler::Step(Uint32 timer_value)
 {
+    std::list<Ball *>::iterator ball_itr;
     _physics.Step((float)timer_value/1000);
 
-    if(_game_state == GAME_STATE_PLAYING && _ball != NULL)
+    if(_game_state == GAME_STATE_PLAYING && _balls.empty() == false)
     {
-        if(_ball->IsDestroyed())
-            BallOutOfGame();
-        else if(_ball->NotMoving())
-            _ball->Start();
+        ball_itr = _balls.begin();
+        while(ball_itr != _balls.end())
+        {
+            if((*ball_itr)->IsDestroyed())
+            {
+                delete (*ball_itr);
+                ball_itr = _balls.erase(ball_itr);
+                if(_balls.empty())
+                    BallOutOfGame();
+            }
+            else 
+            {
+                if((*ball_itr)->NotMoving())
+                    (*ball_itr)->Start();
+                ball_itr++;
+            }
+        }
     }
     
-
     std::vector<IRenderElement *> textures;
     //first load the background image
     textures.push_back(&_background);
@@ -111,9 +125,13 @@ void GameControler::Step(Uint32 timer_value)
             itr = _pieces.erase(itr);
         }
     }
+    if(_pieces.empty())
+    {
+        GameWin();
+    }
 
     std::list<Bonus *>::iterator bonus_itr = _bonus.begin();
-    while(bonus_itr != _bonus.end())
+    while(bonus_itr != _bonus.end() && _balls.empty() == false)
     {
         if((*bonus_itr)->IsDestroyed() == false)
         {
@@ -122,18 +140,28 @@ void GameControler::Step(Uint32 timer_value)
         }
         else
         {
+            switch((*bonus_itr)->BonusType())
+            {
+            case BONUS_MULTIPLE_BALLS:
+                {
+                    Ball *front_ball = _balls.front();
+                    front_ball->Replicates(_balls);
+                }
+                break;
+            default:
+                break;
+            }
             delete (*bonus_itr);
             bonus_itr = _bonus.erase(bonus_itr);
         }
     }
 
-    if(_pieces.empty())
+    ball_itr = _balls.begin();
+    while(ball_itr != _balls.end())
     {
-        GameWin();
+        (*ball_itr)->AddTexture(textures);
+        ball_itr++;
     }
-
-    if(_ball) 
-        _ball->AddTexture(textures);
     _paddle->AddTexture(textures);
 
     for(unsigned int i=0; i<_lines.size(); i++)
@@ -149,35 +177,20 @@ void GameControler::SetMouseX( int x )
 {
     _paddle->SetX(x);
 
-    if(_game_state == GAME_STATE_NOT_PLAYING && _ball != NULL)
+    if(_game_state == GAME_STATE_NOT_PLAYING && _balls.empty() == false)
     {
         int paddle_x, paddle_y;
         _paddle->GetCenterPoint(paddle_x, paddle_y);
-        _ball->SetInitialPosition(paddle_x, paddle_y);
+        _balls.front()->SetInitialPosition(paddle_x, paddle_y);
     }
 }
 
 void GameControler::DestroyGameObjects()
 {
-    for(std::list<Piece *>::iterator itr = _pieces.begin();
-        itr != _pieces.end();
-        itr++)
-    {
-        delete (*itr);
-    }
-    _pieces.clear();
+    ClearPieces();
+    ClearBonus();
+    ClearBalls();
 
-    for(std::list<Bonus *>::iterator itr = _bonus.begin();
-        itr != _bonus.end();
-        itr++)
-    {
-        delete (*itr);
-    }
-    _bonus.clear();
-
-    if(_ball)
-        delete _ball;
-    _ball = NULL;
     if(_paddle)
         delete _paddle;
     _paddle = NULL;
@@ -218,7 +231,7 @@ void GameControler::MouseClick()
     switch(_game_state)
     {
     case GAME_STATE_NOT_PLAYING:
-        _ball->Start();
+        _balls.front()->Start();
         _game_state = GAME_STATE_PLAYING;
         break;
     case GAME_STATE_LOSE:
@@ -236,7 +249,12 @@ void GameControler::MouseClick()
 
 void GameControler::GameWin()
 {
-    _ball->Stop();
+    std::list<Ball *>::iterator b;
+    for(b = _balls.begin(); b != _balls.end(); b++)
+        (*b)->Stop();
+
+    ClearBonus();
+    
     _game_state = GAME_STATE_WIN;
 }
 
@@ -244,8 +262,8 @@ void GameControler::GameOver()
 {
     if(_game_state != GAME_STATE_WIN || _game_state != GAME_STATE_OVER)
     {
-        delete _ball;
-        _ball = NULL;
+        ClearBonus();
+        ClearBalls();
         _game_state = GAME_STATE_OVER;
     }
 }
@@ -254,10 +272,10 @@ void GameControler::NewBallInGame()
 {
     _lives_ball.pop_back();
     _game_state = GAME_STATE_NOT_PLAYING;
-    _ball = new Ball(*this);
+    _balls.push_back(new Ball(*this));
     int paddle_x, paddle_y;
     _paddle->GetCenterPoint(paddle_x, paddle_y);
-    _ball->SetInitialPosition(paddle_x, paddle_y);
+    _balls.back()->SetInitialPosition(paddle_x, paddle_y);
 }
 
 void GameControler::BallOutOfGame()
@@ -266,9 +284,44 @@ void GameControler::BallOutOfGame()
     {
         _game_state = GAME_STATE_LOSE;
         Music().PlayGameOver();
-        delete _ball;
-        _ball = NULL;
+        while(_balls.empty() == false)
+        {
+            delete (_balls.front());
+            _balls.pop_front();
+        }
+
         if(_lives_ball.empty())
             GameOver();
+    }
+}
+
+void GameControler::ClearBonus()
+{
+    for(std::list<Bonus *>::iterator itr = _bonus.begin();
+        itr != _bonus.end();
+        itr++)
+    {
+        delete (*itr);
+    }
+    _bonus.clear();
+}
+
+void GameControler::ClearPieces()
+{
+    for(std::list<Piece *>::iterator itr = _pieces.begin();
+        itr != _pieces.end();
+        itr++)
+    {
+        delete (*itr);
+    }
+    _pieces.clear();
+}
+
+void GameControler::ClearBalls()
+{
+    while(_balls.empty() == false)
+    {
+        delete (_balls.front());
+        _balls.pop_front();
     }
 }

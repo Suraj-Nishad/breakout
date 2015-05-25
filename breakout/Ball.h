@@ -2,6 +2,7 @@
 
 #include "TextureGameObject.h"
 #include "PNGImage.h"
+#include <list>
 
 class Ball : public TextureGameObject
 {
@@ -23,6 +24,8 @@ protected:
 public:
     Ball(GameControler &game);
 
+    Ball(const Ball *another_ball);
+    
     virtual ~Ball(void);
 
     void SetInitialPosition(int x, int y);
@@ -33,7 +36,15 @@ public:
 
     bool NotMoving();
 
+    void GetVelocity(float &velocity, float &angle);
+
+    void SetVelocity(float velocity, float angle);
+
+    void Replicates(std::list<Ball *> &ball_list);
+
 protected:
+
+    void Initialize();
 
     virtual Texture * GetTexture();
 

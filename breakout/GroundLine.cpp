@@ -13,6 +13,8 @@ GroundLine::GroundLine(GameControler &game) : _game(game)
     b2FixtureDef fixture;
     fixture.shape = &edge;
     fixture.friction = 0;
+    fixture.filter.categoryBits = GAME_OBJECT_GROUND;
+    fixture.filter.maskBits = GAME_OBJECT_BALL | GAME_OBJECT_BONUS;
 
     edge.Set(b2Vec2(0.0, _game.HeightMeter()+2*_game.MarginMeter()),
              b2Vec2(_game.WidthMeter()+2*_game.MarginMeter(), _game.HeightMeter()+2*_game.MarginMeter()));

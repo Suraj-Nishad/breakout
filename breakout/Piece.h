@@ -18,7 +18,7 @@ public:
 
     virtual GAME_OBJECT_TYPE Type();
 
-    inline bool HasBonus() {return false;}
+    inline bool HasBonus() {return _has_bonus;}
 
 protected:
     static PNGImage _g_piece_png;
@@ -36,6 +36,8 @@ protected:
     virtual void EndContact( IGameObject *another_object );
 
     WeakCopyTexture _piece_texture;
+
+    bool _has_bonus;
 };
 
 

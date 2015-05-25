@@ -18,6 +18,9 @@ Paddle::Paddle(GameControler &game) : TextureGameObject(game, b2_kinematicBody),
     fixture.shape = &rect;
     fixture.density = 0;
     fixture.restitution = 1;
+    fixture.filter.categoryBits = GAME_OBJECT_PADDLE;
+    fixture.filter.maskBits = GAME_OBJECT_BALL | GAME_OBJECT_BONUS;
+
     _body->CreateFixture(&fixture);
 
     _min_x = game.MarginPixel() + _paddle_png.Width()/2;

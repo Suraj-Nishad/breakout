@@ -51,6 +51,12 @@ public:
     void CreateGameObjects();
     void DestroyGameObjects();
 
+    void ClearBalls();
+
+    void ClearPieces();
+
+    void ClearBonus();
+
     void NewBallInGame();
     void BallOutOfGame();
 
@@ -87,7 +93,8 @@ protected:
 
     std::list<Piece *> _pieces;
     std::list<Bonus *> _bonus;
-    Ball *_ball;
+    std::list<Ball *> _balls;
+
     Paddle *_paddle;
     GroundLine *_ground;
 
