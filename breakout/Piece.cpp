@@ -26,10 +26,16 @@ Piece::Piece
     _body->SetTransform(b2Vec2(_game.Physics().Pixel2Meter(x+_piece_texture.Width()/2), _game.Physics().Pixel2Meter(y+_piece_texture.Height()/2)), _body->GetAngle());
     b2FixtureDef fixture;
     b2PolygonShape rect;
-    rect.SetAsBox(_game.Physics().Pixel2Meter(_piece_texture.Width()/2), _game.Physics().Pixel2Meter(_piece_texture.Height()/2));
-    //HACK: We don't really want a perfect box to avoid horizontal movement.
-    rect.m_vertices[1].x *= 0.8;
-    rect.m_vertices[2].x *= 0.8;
+    //HACK: We don't want a perfect rectangular to avoid horizontal movements. 
+    float hx, hy;
+    hx = _game.Physics().Pixel2Meter(_piece_texture.Width()/2);
+    hy = _game.Physics().Pixel2Meter(_piece_texture.Height()/2);
+    b2Vec2 vertices[4];
+    vertices[0].Set(-hx * 0.8, -hy);
+    vertices[1].Set(hx * 0.8, -hy);
+    vertices[2].Set(hx * 1.1, hy);
+    vertices[3].Set(-hx * 1.1, hy);
+    rect.Set(vertices, 4);
     
     fixture.shape = &rect;
     fixture.density = 0;
