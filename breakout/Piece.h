@@ -8,11 +8,13 @@ class Piece : public GameObject
 public:
     static void LoadPNG(RenderEngine &engine);
 
+    static Texture &Image() {return _g_piece_png;}
+
     static int PNGHeight() {return _g_piece_png.Height();}
 
     static int PNGWidth() {return _g_piece_png.Width();}
 
-public:
+protected:
     static PNGImage _g_piece_png;
 
 public:

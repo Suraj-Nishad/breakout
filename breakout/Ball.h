@@ -5,6 +5,19 @@
 
 class Ball : public GameObject
 {
+
+public:
+    static void LoadPNG(RenderEngine &engine);
+
+    static Texture &Image() {return _g_ball_png;}
+
+    static int PNGHeight() {return _g_ball_png.Height();}
+
+    static int PNGWidth() {return _g_ball_png.Width();}
+
+protected:
+    static PNGImage _g_ball_png;
+
 public:
     Ball(GameControler &game);
 
@@ -26,6 +39,6 @@ protected:
 
     void CheckVelocity();
 
-    PNGImage _ball_png;
+    WeakCopyTexture _ball_png;
 };
 

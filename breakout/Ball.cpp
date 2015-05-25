@@ -2,10 +2,14 @@
 #include "GameControler.h"
 #include <math.h>
 
-Ball::Ball(GameControler &game) : GameObject(game, b2_dynamicBody), _ball_png("ball.png")
+PNGImage Ball::_g_ball_png("ball.png");
+void Ball::LoadPNG( RenderEngine &engine )
 {
-    _ball_png.Load(game.Renderer());
+    _g_ball_png.Load(engine);
+}
 
+Ball::Ball(GameControler &game) : GameObject(game, b2_dynamicBody), _ball_png(_g_ball_png)
+{
     b2FixtureDef fixture;
     b2CircleShape circle;
     circle.m_radius = _game.Physics().Pixel2Meter(_ball_png.Width() / 2);
@@ -82,3 +86,4 @@ bool Ball::NotMoving()
     const b2Vec2 &v = _body->GetLinearVelocity();
     return v.x == 0.0 && v.y == 0.0;
 }
+

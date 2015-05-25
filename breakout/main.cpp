@@ -50,7 +50,8 @@ int main( int argc, char* argv[] )
                 game.MouseClick();
                 break;
             case SDL_USEREVENT:
-                game.Step((Uint32)e.user.data1);
+                if(e.user.code == 0)
+                    game.Step((Uint32)e.user.data1);
                 break;
             case SDL_KEYUP:
                 if(e.key.keysym.sym == SDLK_ESCAPE)

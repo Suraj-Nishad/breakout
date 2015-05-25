@@ -26,6 +26,8 @@ GameControler::GameControler() : _background("MCTestTaskBackground.png")
 {
     _engine.CreateWindow("Breakout", 500, 700);
     Piece::LoadPNG(_engine);
+    Ball::LoadPNG(_engine);
+
     _background.Load(_engine);
 
     _width = _engine.Width()-2*GAME_AREA_MARGIN;    
@@ -75,15 +77,22 @@ void GameControler::Step(Uint32 timer_value)
     if(_game_state == GAME_STATE_PLAYING && _ball != NULL)
     {
         if(_ball->IsDestroyed())
-            GameOver();
+            BallOutOfGame();
         else if(_ball->NotMoving())
             _ball->Start();
     }
     
 
-    std::vector<IRenderElement *> textures;    
-    
+    std::vector<IRenderElement *> textures;
+    //first load the background image
     textures.push_back(&_background);
+
+    //then we push all the balls that represent lives
+    for(unsigned int i=0; i<_lives_ball.size(); i++)
+    {
+        textures.push_back(_lives_ball[i]);
+    }
+
 
     std::list<Piece *>::iterator itr = _pieces.begin();
     while(itr != _pieces.end())
@@ -149,12 +158,14 @@ void GameControler::DestroyGameObjects()
 
 void GameControler::CreateGameObjects()
 {
-    _game_state = GAME_STATE_NOT_PLAYING;
     _paddle = new Paddle(*this);
-    _ball = new Ball(*this);
-    int paddle_x, paddle_y;
-    _paddle->GetCenterPoint(paddle_x, paddle_y);
-    _ball->SetInitialPosition(paddle_x, paddle_y);
+    
+    for(int i=0; i<3; i++)
+    {
+        _lives_ball.push_back(new WeakCopyTexture(Ball::Image()));
+        _lives_ball.back()->SetPosition(GAME_AREA_MARGIN + 2*i*GAME_AREA_MARGIN, 0);
+    }
+
 
     int x, y, max_width;
     for(int i=0; i<4; i++)
@@ -171,7 +182,7 @@ void GameControler::CreateGameObjects()
             _pieces.push_back(piece);
         }
     }
-
+    NewBallInGame();
     Music().PlayGameStart();
 }
 
@@ -182,6 +193,9 @@ void GameControler::MouseClick()
     case GAME_STATE_NOT_PLAYING:
         _ball->Start();
         _game_state = GAME_STATE_PLAYING;
+        break;
+    case GAME_STATE_LOSE:
+        NewBallInGame();
         break;
     case GAME_STATE_WIN:
     case GAME_STATE_OVER:
@@ -206,6 +220,25 @@ void GameControler::GameOver()
         delete _ball;
         _ball = NULL;
         _game_state = GAME_STATE_OVER;
-        Music().PlayGameOver();
     }
+}
+
+void GameControler::NewBallInGame()
+{
+    _lives_ball.pop_back();
+    _game_state = GAME_STATE_NOT_PLAYING;
+    _ball = new Ball(*this);
+    int paddle_x, paddle_y;
+    _paddle->GetCenterPoint(paddle_x, paddle_y);
+    _ball->SetInitialPosition(paddle_x, paddle_y);
+}
+
+void GameControler::BallOutOfGame()
+{ 
+    _game_state = GAME_STATE_LOSE;
+    Music().PlayGameOver();
+    delete _ball;
+    _ball = NULL;
+    if(_lives_ball.empty())
+        GameOver();
 }
