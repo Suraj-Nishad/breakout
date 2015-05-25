@@ -8,6 +8,7 @@ typedef enum
 {
     BONUS_NONE = 0,
     BONUS_MULTIPLE_BALLS = 1,
+    BONUS_EXTRA_LIFE,
 
     BONUS_NUMBER_OF_BONUS
 } BONUS_TYPE;

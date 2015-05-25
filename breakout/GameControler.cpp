@@ -54,6 +54,7 @@ GameControler::GameControler() : _background("MCTestTaskBackground.png")
     }
         
     _ground = new GroundLine(*this);
+    _game_state = GAME_STATE_NOT_PLAYING;
 
     CreateGameObjects();
 }
@@ -102,10 +103,10 @@ void GameControler::Step(Uint32 timer_value)
     //first load the background image
     textures.push_back(&_background);
 
-    //then we push all the balls that represent lives
-    for(unsigned int i=0; i<_lives_ball.size(); i++)
+    //then we push all the balls that represent lifes
+    for(unsigned int i=0; i<_lifes_ball.size(); i++)
     {
-        textures.push_back(_lives_ball[i]);
+        textures.push_back(_lifes_ball[i]);
     }
 
 
@@ -140,17 +141,8 @@ void GameControler::Step(Uint32 timer_value)
         }
         else
         {
-            switch((*bonus_itr)->BonusType())
-            {
-            case BONUS_MULTIPLE_BALLS:
-                {
-                    Ball *front_ball = _balls.front();
-                    front_ball->Replicates(_balls);
-                }
-                break;
-            default:
-                break;
-            }
+            ApplyBonus((*bonus_itr)->BonusType());
+
             delete (*bonus_itr);
             bonus_itr = _bonus.erase(bonus_itr);
         }
@@ -191,22 +183,26 @@ void GameControler::DestroyGameObjects()
     ClearBonus();
     ClearBalls();
 
+    for(unsigned int i=0;i<_lifes_ball.size(); i++)
+        delete _lifes_ball[i];
+    _lifes_ball.clear();
+
     if(_paddle)
         delete _paddle;
+
     _paddle = NULL;
 }
 
-void GameControler::CreateGameObjects()
+void GameControler::CreateGameObjects( unsigned int number_of_life /*= 3*/ )
 {
     _paddle = new Paddle(*this);
     
-    for(int i=0; i<3; i++)
+    for(unsigned int i=0; i<number_of_life; i++)
     {
-        _lives_ball.push_back(new WeakCopyTexture(Ball::Image()));
-        _lives_ball.back()->SetPosition(GAME_AREA_MARGIN + 2*i*GAME_AREA_MARGIN, 0);
+        _lifes_ball.push_back(new WeakCopyTexture(Ball::Image()));
+        _lifes_ball.back()->SetPosition(GAME_AREA_MARGIN + 2*i*GAME_AREA_MARGIN, 0);
     }
-
-
+    
     int x, y, max_width;
     for(int i=0; i<4; i++)
     {
@@ -238,6 +234,12 @@ void GameControler::MouseClick()
         NewBallInGame();
         break;
     case GAME_STATE_WIN:
+        {
+            unsigned int lifes = _lifes_ball.size();
+            DestroyGameObjects();
+            CreateGameObjects(lifes+1);
+        }
+        break;
     case GAME_STATE_OVER:
         DestroyGameObjects();
         CreateGameObjects();
@@ -270,7 +272,7 @@ void GameControler::GameOver()
 
 void GameControler::NewBallInGame()
 {
-    _lives_ball.pop_back();
+    _lifes_ball.pop_back();
     _game_state = GAME_STATE_NOT_PLAYING;
     _balls.push_back(new Ball(*this));
     int paddle_x, paddle_y;
@@ -290,7 +292,7 @@ void GameControler::BallOutOfGame()
             _balls.pop_front();
         }
 
-        if(_lives_ball.empty())
+        if(_lifes_ball.empty())
             GameOver();
     }
 }
@@ -323,5 +325,29 @@ void GameControler::ClearBalls()
     {
         delete (_balls.front());
         _balls.pop_front();
+    }
+}
+
+void GameControler::ApplyBonus( BONUS_TYPE type )
+{
+    switch(type)
+    {
+    case BONUS_MULTIPLE_BALLS:
+        {
+            Ball *front_ball = _balls.front();
+            front_ball->Replicates(_balls);
+            Music().PlayBonus();
+        }
+        break;
+    case BONUS_EXTRA_LIFE:
+        {
+            int current_number = _lifes_ball.size();
+            _lifes_ball.push_back(new WeakCopyTexture(Ball::Image()));
+            _lifes_ball.back()->SetPosition(GAME_AREA_MARGIN + 2*current_number*GAME_AREA_MARGIN, 0);
+            Music().PlayExtraLife();
+        }
+        break;
+    default:
+        break;
     }
 }

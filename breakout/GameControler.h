@@ -5,6 +5,7 @@
 #include "MusicPlayer.h"
 #include "Texture.h"
 #include "PNGImage.h"
+#include "Bonus.h"
 #include <vector>
 #include <list>
 
@@ -12,7 +13,6 @@ class Ball;
 class Paddle;
 class Piece;
 class GroundLine;
-class Bonus;
 
 class Line : public IRenderElement
 {
@@ -48,7 +48,7 @@ public:
     GameControler();
     virtual ~GameControler(void);
 
-    void CreateGameObjects();
+    void CreateGameObjects(unsigned int number_of_life = 3);
     void DestroyGameObjects();
 
     void ClearBalls();
@@ -69,6 +69,8 @@ public:
     void Step(Uint32 timer_value);
 
 
+
+
     inline int WidthPixel() {return _width;}
     inline int HeightPixel() {return _height;}
     inline int MarginPixel() {return GAME_AREA_MARGIN;}
@@ -81,7 +83,11 @@ public:
     inline RenderEngine &Renderer() {return _engine;}
     inline MusicPlayer &Music() {return _music;}
 
-protected:
+protected:    
+    
+    void ApplyBonus(BONUS_TYPE type);
+    
+    
     RenderEngine _engine;
     PhysicsSimulator _physics;
     MusicPlayer _music;
@@ -100,7 +106,7 @@ protected:
 
     GAME_STATE _game_state;
 
-    std::vector<Texture *> _lives_ball;
+    std::vector<Texture *> _lifes_ball;
 };
 
 

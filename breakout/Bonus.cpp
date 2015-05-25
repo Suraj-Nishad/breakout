@@ -37,7 +37,11 @@ void Bonus::BeginContact( IGameObject *another_object )
 {
     if(another_object->Type() == GAME_OBJECT_PADDLE)
     {
-        _bonus_type = BONUS_MULTIPLE_BALLS;
+        int n = rand() % 2;
+        if(n == 0)
+            _bonus_type = BONUS_EXTRA_LIFE;
+        else
+            _bonus_type = BONUS_MULTIPLE_BALLS;
         Destroy();
     }
 }

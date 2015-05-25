@@ -15,6 +15,8 @@ MusicPlayer::MusicPlayer(void)
     _game_start = Mix_LoadWAV("Ark Intro Music.aif");
     _game_over = Mix_LoadWAV("Ark Game Over Music 2.aif");
     _bounce = Mix_LoadWAV("Ark Bounce 2.aif");
+    _extra_life = Mix_LoadWAV("Ark Longship.aif");
+    _bonus = Mix_LoadWAV("Ark Metal Bounce.aif");
 }
 
 
@@ -23,6 +25,8 @@ MusicPlayer::~MusicPlayer(void)
     Mix_FreeChunk(_game_start);
     Mix_FreeChunk(_game_over);
     Mix_FreeChunk(_bounce);
+    Mix_FreeChunk(_extra_life);
+    Mix_FreeChunk(_bonus);
     //shutdown SDL_mixer library
     Mix_Quit();
 }
