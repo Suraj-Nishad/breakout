@@ -25,18 +25,21 @@ void Line::Show( RenderEngine &_engine )
 
 GameControler::GameControler() : _background("MCTestTaskBackground.png")
 {
+    //Create the game window
     _engine.CreateWindow("Breakout", 500, 700);
+
+    //pre load PNG files.
     Piece::LoadPNG(_engine);
     Ball::LoadPNG(_engine);
-
     _background.Load(_engine);
 
+    //game area should be smaller than actual window area.
     _width = _engine.Width()-2*GAME_AREA_MARGIN;    
     _height = _engine.Height()-2*GAME_AREA_MARGIN;
 
+    //create a static object and delimit it with side lines.
     b2BodyDef body_def;
     _body = _physics.World().CreateBody(&body_def);
-
     _lines.push_back(new Line(_physics, GAME_AREA_MARGIN-1, GAME_AREA_MARGIN-1, _engine.Width()-GAME_AREA_MARGIN, GAME_AREA_MARGIN-1));
     _lines.push_back(new Line(_physics, _engine.Width()-GAME_AREA_MARGIN, GAME_AREA_MARGIN-1, _engine.Width()-GAME_AREA_MARGIN, _engine.Height()));
     _lines.push_back(new Line(_physics, GAME_AREA_MARGIN-1, GAME_AREA_MARGIN-1, GAME_AREA_MARGIN-1, _engine.Height()));
@@ -53,6 +56,7 @@ GameControler::GameControler() : _background("MCTestTaskBackground.png")
         _body->CreateFixture(&fixture);
     }
         
+    //Ground line is a special object and it is invisible.
     _ground = new GroundLine(*this);
     _game_state = GAME_STATE_NOT_PLAYING;
 
@@ -75,31 +79,13 @@ GameControler::~GameControler(void)
 
 void GameControler::Step(Uint32 timer_value)
 {
-    std::list<Ball *>::iterator ball_itr;
+    //Step the physics simulation
     _physics.Step((float)timer_value/1000);
+   
 
-    if(_game_state == GAME_STATE_PLAYING && _balls.empty() == false)
-    {
-        ball_itr = _balls.begin();
-        while(ball_itr != _balls.end())
-        {
-            if((*ball_itr)->IsDestroyed())
-            {
-                delete (*ball_itr);
-                ball_itr = _balls.erase(ball_itr);
-                if(_balls.empty())
-                    BallOutOfGame();
-            }
-            else 
-            {
-                if((*ball_itr)->NotMoving())
-                    (*ball_itr)->Start();
-                ball_itr++;
-            }
-        }
-    }
-    
+    //and now iterates over all elements and create the textures vector to render.
     std::vector<IRenderElement *> textures;
+
     //first load the background image
     textures.push_back(&_background);
 
@@ -109,7 +95,7 @@ void GameControler::Step(Uint32 timer_value)
         textures.push_back(_lifes_ball[i]);
     }
 
-
+    //check all the pieces
     std::list<Piece *>::iterator itr = _pieces.begin();
     while(itr != _pieces.end())
     {
@@ -126,11 +112,14 @@ void GameControler::Step(Uint32 timer_value)
             itr = _pieces.erase(itr);
         }
     }
+
+    //if no more pieces, user win!!
     if(_pieces.empty())
     {
         GameWin();
     }
 
+    //check all bonus that are "falling"
     std::list<Bonus *>::iterator bonus_itr = _bonus.begin();
     while(bonus_itr != _bonus.end() && _balls.empty() == false)
     {
@@ -148,19 +137,45 @@ void GameControler::Step(Uint32 timer_value)
         }
     }
 
-    ball_itr = _balls.begin();
-    while(ball_itr != _balls.end())
+    //check for ball(s) state.
+    if(_balls.empty() == false)
     {
-        (*ball_itr)->AddTexture(textures);
-        ball_itr++;
+        //check for the ball(s) state
+        std::list<Ball *>::iterator ball_itr = _balls.begin();
+        while(ball_itr != _balls.end())
+        {
+            if((*ball_itr)->IsDestroyed())
+            {
+                //Destroy the ball
+                delete (*ball_itr);
+                ball_itr = _balls.erase(ball_itr);
+
+                //if no more balls in game, user lose!
+                if(_balls.empty())
+                    BallOutOfGame();
+            }
+            else 
+            {
+                //check if balls is still moving......
+                if(_game_state == GAME_STATE_PLAYING && (*ball_itr)->NotMoving())
+                    (*ball_itr)->Start();
+
+                (*ball_itr)->AddTexture(textures);
+                ball_itr++;
+            }
+        }
     }
+
+
+    //add the paddle...
     _paddle->AddTexture(textures);
 
+    //.. and the side lines
     for(unsigned int i=0; i<_lines.size(); i++)
-    {
         textures.push_back(_lines[i]);
-    }
 
+
+    //render everything!
     _engine.Render(textures);
 
 }
@@ -195,14 +210,17 @@ void GameControler::DestroyGameObjects()
 
 void GameControler::CreateGameObjects( unsigned int number_of_life /*= 3*/ )
 {
+    //Add paddle...
     _paddle = new Paddle(*this);
     
+    //.. a number of balls that represent lifes.
     for(unsigned int i=0; i<number_of_life; i++)
     {
         _lifes_ball.push_back(new WeakCopyTexture(Ball::Image()));
         _lifes_ball.back()->SetPosition(GAME_AREA_MARGIN + 2*i*GAME_AREA_MARGIN, 0);
     }
     
+    //Fill the top with 4 rows of pieces.
     int x, y, max_width;
     for(int i=0; i<4; i++)
     {
@@ -218,6 +236,8 @@ void GameControler::CreateGameObjects( unsigned int number_of_life /*= 3*/ )
             _pieces.push_back(piece);
         }
     }
+    
+    //Add a new ball to the game...
     NewBallInGame();
     Music().PlayGameStart();
 }
@@ -227,20 +247,24 @@ void GameControler::MouseClick()
     switch(_game_state)
     {
     case GAME_STATE_NOT_PLAYING:
+        //Waiting user to start!
         _balls.front()->Start();
         _game_state = GAME_STATE_PLAYING;
         break;
     case GAME_STATE_LOSE:
+        //Add a new ball to the game...
         NewBallInGame();
         break;
     case GAME_STATE_WIN:
         {
+            //users won. Recreate game objects with the number of lifes.
             unsigned int lifes = _lifes_ball.size();
             DestroyGameObjects();
             CreateGameObjects(lifes+1);
         }
         break;
     case GAME_STATE_OVER:
+        //Restart the game!
         DestroyGameObjects();
         CreateGameObjects();
         break;
@@ -251,19 +275,25 @@ void GameControler::MouseClick()
 
 void GameControler::GameWin()
 {
-    std::list<Ball *>::iterator b;
-    for(b = _balls.begin(); b != _balls.end(); b++)
-        (*b)->Stop();
+    if(_game_state == GAME_STATE_PLAYING)
+    {
+        //User won! Stop all balls
+        std::list<Ball *>::iterator b;
+        for(b = _balls.begin(); b != _balls.end(); b++)
+            (*b)->Stop();
 
-    ClearBonus();
+        //Drop all running bonuses
+        ClearBonus();
     
-    _game_state = GAME_STATE_WIN;
+        _game_state = GAME_STATE_WIN;
+    }
 }
 
 void GameControler::GameOver()
 {
     if(_game_state != GAME_STATE_WIN || _game_state != GAME_STATE_OVER)
     {
+        //GAME OVER!! Drops all bonus and cleanup all balls.
         ClearBonus();
         ClearBalls();
         _game_state = GAME_STATE_OVER;
@@ -272,9 +302,12 @@ void GameControler::GameOver()
 
 void GameControler::NewBallInGame()
 {
+    //Pop one life (ball) and put it to the game!
     _lifes_ball.pop_back();
     _game_state = GAME_STATE_NOT_PLAYING;
     _balls.push_back(new Ball(*this));
+
+    //put balls at the top of paddle and wait user to click to start.
     int paddle_x, paddle_y;
     _paddle->GetCenterPoint(paddle_x, paddle_y);
     _balls.back()->SetInitialPosition(paddle_x, paddle_y);
@@ -284,14 +317,14 @@ void GameControler::BallOutOfGame()
 { 
     if(_game_state == GAME_STATE_PLAYING)
     {
+        //no more balls in game. User lose!!!
         _game_state = GAME_STATE_LOSE;
         Music().PlayGameOver();
-        while(_balls.empty() == false)
-        {
-            delete (_balls.front());
-            _balls.pop_front();
-        }
 
+        //do some cleanups
+        ClearBalls();
+
+        //if no more lifes, game is over!
         if(_lifes_ball.empty())
             GameOver();
     }
