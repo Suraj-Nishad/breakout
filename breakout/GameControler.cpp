@@ -235,10 +235,13 @@ void GameControler::NewBallInGame()
 
 void GameControler::BallOutOfGame()
 { 
-    _game_state = GAME_STATE_LOSE;
-    Music().PlayGameOver();
-    delete _ball;
-    _ball = NULL;
-    if(_lives_ball.empty())
-        GameOver();
+    if(_game_state == GAME_STATE_PLAYING)
+    {
+        _game_state = GAME_STATE_LOSE;
+        Music().PlayGameOver();
+        delete _ball;
+        _ball = NULL;
+        if(_lives_ball.empty())
+            GameOver();
+    }
 }

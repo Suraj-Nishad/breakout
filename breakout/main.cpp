@@ -55,9 +55,7 @@ int main( int argc, char* argv[] )
                 break;
             case SDL_KEYUP:
                 if(e.key.keysym.sym == SDLK_ESCAPE)
-                {
-                    game.GameOver();
-                }
+                    game.BallOutOfGame();
                 break;
             default:
                 break;
