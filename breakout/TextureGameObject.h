@@ -2,6 +2,7 @@
 
 #include "RenderEngine.h"
 #include "PhysicsSimulator.h"
+#include "IGameObject.h"
 
 #include <string>
 #include <vector>
@@ -9,13 +10,13 @@
 class Texture;
 class GameControler;
 
-class GameObject : public IGameObject
+class TextureGameObject : public IGameObject
 {
 public:
-    GameObject(GameControler &game,
+    TextureGameObject(GameControler &game,
                b2BodyType body_type);
 
-    virtual ~GameObject(void);
+    virtual ~TextureGameObject(void);
 
     void AddTexture(std::vector<IRenderElement *> &elements);
 

@@ -4,6 +4,7 @@
 #include "Paddle.h"
 #include "Piece.h"
 #include "GroundLine.h"
+#include "Bonus.h"
 
 Line::Line(PhysicsSimulator &_physics, int x0, int y0, int x1, int y1 )
 {
@@ -104,8 +105,25 @@ void GameControler::Step(Uint32 timer_value)
         }
         else
         {
+            if((*itr)->HasBonus())
+                _bonus.push_back(new Bonus(*this, *(*itr)));
             delete (*itr);
             itr = _pieces.erase(itr);
+        }
+    }
+
+    std::list<Bonus *>::iterator bonus_itr = _bonus.begin();
+    while(bonus_itr != _bonus.end())
+    {
+        if((*bonus_itr)->IsDestroyed() == false)
+        {
+            (*bonus_itr)->AddTexture(textures);
+            bonus_itr++;
+        }
+        else
+        {
+            delete (*bonus_itr);
+            bonus_itr = _bonus.erase(bonus_itr);
         }
     }
 
@@ -148,6 +166,15 @@ void GameControler::DestroyGameObjects()
         delete (*itr);
     }
     _pieces.clear();
+
+    for(std::list<Bonus *>::iterator itr = _bonus.begin();
+        itr != _bonus.end();
+        itr++)
+    {
+        delete (*itr);
+    }
+    _bonus.clear();
+
     if(_ball)
         delete _ball;
     _ball = NULL;

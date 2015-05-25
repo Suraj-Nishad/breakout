@@ -1,10 +1,12 @@
 #pragma once
-#include "gameobject.h"
+#include "TextureGameObject.h"
 #include "PNGImage.h"
 #include "Texture.h"
 
-class Piece : public GameObject
+class Bonus;
+class Piece : public TextureGameObject
 {
+friend Bonus;
 public:
     static void LoadPNG(RenderEngine &engine);
 
@@ -13,6 +15,10 @@ public:
     static int PNGHeight() {return _g_piece_png.Height();}
 
     static int PNGWidth() {return _g_piece_png.Width();}
+
+    virtual GAME_OBJECT_TYPE Type();
+
+    inline bool HasBonus() {return false;}
 
 protected:
     static PNGImage _g_piece_png;

@@ -95,8 +95,9 @@ xcopy /y "$(SolutionDir)sounds\*.aif" "$(OutDir)"</Command>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Ball.cpp" />
+    <ClCompile Include="Bonus.cpp" />
     <ClCompile Include="GameControler.cpp" />
-    <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="TextureGameObject.cpp" />
     <ClCompile Include="GroundLine.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MusicPlayer.cpp" />
@@ -109,9 +110,11 @@ xcopy /y "$(SolutionDir)sounds\*.aif" "$(OutDir)"</Command>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Ball.h" />
+    <ClInclude Include="Bonus.h" />
     <ClInclude Include="GameControler.h" />
-    <ClInclude Include="GameObject.h" />
+    <ClInclude Include="TextureGameObject.h" />
     <ClInclude Include="GroundLine.h" />
+    <ClInclude Include="IGameObject.h" />
     <ClInclude Include="IRenderElement.h" />
     <ClInclude Include="MusicPlayer.h" />
     <ClInclude Include="Paddle.h" />

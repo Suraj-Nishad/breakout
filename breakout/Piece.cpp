@@ -13,7 +13,7 @@ Piece::Piece
     int x, 
     int y,
     int max_width
-) : GameObject(game, b2_staticBody), _piece_texture(_g_piece_png)
+) : TextureGameObject(game, b2_staticBody), _piece_texture(_g_piece_png)
 {
     int width = rand() % (2*PNGWidth());
     if(width < PNGWidth()/2)
@@ -52,4 +52,9 @@ void Piece::EndContact( IGameObject *another_object )
     Destroy();
 
     _game.Music().PlayBounce();
+}
+
+GAME_OBJECT_TYPE Piece::Type()
+{
+    return GAME_OBJECT_PIECE;
 }

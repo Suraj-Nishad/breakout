@@ -1,9 +1,9 @@
 #pragma once
 
-#include "GameObject.h"
+#include "TextureGameObject.h"
 #include "PNGImage.h"
 
-class Ball : public GameObject
+class Ball : public TextureGameObject
 {
 
 public:
@@ -14,6 +14,8 @@ public:
     static int PNGHeight() {return _g_ball_png.Height();}
 
     static int PNGWidth() {return _g_ball_png.Width();}
+
+    virtual GAME_OBJECT_TYPE Type();
 
 protected:
     static PNGImage _g_ball_png;

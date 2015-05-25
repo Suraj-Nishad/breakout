@@ -8,7 +8,7 @@ void Ball::LoadPNG( RenderEngine &engine )
     _g_ball_png.Load(engine);
 }
 
-Ball::Ball(GameControler &game) : GameObject(game, b2_dynamicBody), _ball_png(_g_ball_png)
+Ball::Ball(GameControler &game) : TextureGameObject(game, b2_dynamicBody), _ball_png(_g_ball_png)
 {
     b2FixtureDef fixture;
     b2CircleShape circle;
@@ -87,3 +87,7 @@ bool Ball::NotMoving()
     return v.x == 0.0 && v.y == 0.0;
 }
 
+GAME_OBJECT_TYPE Ball::Type()
+{
+    return GAME_OBJECT_BALL;
+}

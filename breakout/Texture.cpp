@@ -14,14 +14,8 @@ Texture::~Texture(void)
 
 Texture::Texture(const Texture &another_texture)
 {
-    _width = another_texture._width;
-    _height = another_texture._height;
-    _x = another_texture._x;
-    _y = another_texture._y;
-    _has_color = another_texture._has_color;
-    _r = another_texture._r;
-    _g = another_texture._g;
-    _b = another_texture._b;
+    CopyCharacteristics(another_texture);
+
 }
 
 void Texture::Show(RenderEngine &engine)
@@ -49,6 +43,18 @@ void Texture::SetColor(Uint8 r, Uint8 g, Uint8 b)
     _r = r;
     _g = g;
     _b = b;
+}
+
+void Texture::CopyCharacteristics( const Texture &another_texture )
+{
+    _width = another_texture._width;
+    _height = another_texture._height;
+    _x = another_texture._x;
+    _y = another_texture._y;
+    _has_color = another_texture._has_color;
+    _r = another_texture._r;
+    _g = another_texture._g;
+    _b = another_texture._b;
 }
 
 WeakCopyTexture::WeakCopyTexture(Texture &another_texture) : Texture(another_texture)

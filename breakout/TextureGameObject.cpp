@@ -1,9 +1,9 @@
-#include "GameObject.h"
+#include "TextureGameObject.h"
 #include "Texture.h"
 #include "GameControler.h"
 #include "PhysicsSimulator.h"
 
-GameObject::GameObject
+TextureGameObject::TextureGameObject
 (
     GameControler &game, 
     b2BodyType body_type
@@ -17,21 +17,21 @@ GameObject::GameObject
 }
 
 
-GameObject::~GameObject(void)
+TextureGameObject::~TextureGameObject(void)
 {
     _game.Physics().World().DestroyBody(_body);
 }
 
-void GameObject::BeginContact( IGameObject *another_object )
+void TextureGameObject::BeginContact( IGameObject *another_object )
 {
 }
 
-void GameObject::EndContact(IGameObject *another_object)
+void TextureGameObject::EndContact(IGameObject *another_object)
 {
 
 }
 
-void GameObject::AddTexture( std::vector<IRenderElement *> &elements )
+void TextureGameObject::AddTexture( std::vector<IRenderElement *> &elements )
 {
     Texture *this_texture = GetTexture();
     int x = _game.Physics().Meter2Pixel(_body->GetPosition().x)-(this_texture->Width() / 2);
@@ -41,12 +41,12 @@ void GameObject::AddTexture( std::vector<IRenderElement *> &elements )
     elements.push_back(this_texture);
 }
 
-void GameObject::Destroy()
+void TextureGameObject::Destroy()
 {
     _destroyed = true;
 }
 
-bool GameObject::IsDestroyed()
+bool TextureGameObject::IsDestroyed()
 {
     return _destroyed;
 }

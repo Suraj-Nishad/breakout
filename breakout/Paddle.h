@@ -1,10 +1,10 @@
 #pragma once
 
 #include "GameControler.h"
-#include "GameObject.h"
+#include "TextureGameObject.h"
 #include "PNGImage.h"
 
-class Paddle : public GameObject
+class Paddle : public TextureGameObject
 {
 public:
     Paddle(GameControler &game);
@@ -14,6 +14,8 @@ public:
     void SetX(int x);
 
     void GetCenterPoint(int &x, int &y);
+
+    virtual GAME_OBJECT_TYPE Type();
 
 protected:
 

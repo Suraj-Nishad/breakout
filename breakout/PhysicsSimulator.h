@@ -25,19 +25,3 @@ protected:
 
     b2World *_world;
 };
-
-class IGameObject
-{
-public:
-    virtual void BeginContact(IGameObject *another_object) = 0;
-
-    virtual void EndContact(IGameObject *another_object) = 0;
-
-    virtual void Destroy() = 0;
-
-    virtual bool IsDestroyed() = 0;
-
-protected:
-    IGameObject() {}
-    virtual ~IGameObject() {};
-};

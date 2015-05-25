@@ -1,5 +1,5 @@
 #include "PhysicsSimulator.h"
-
+#include "IGameObject.h"
 
 PhysicsSimulator::PhysicsSimulator(void)
 {

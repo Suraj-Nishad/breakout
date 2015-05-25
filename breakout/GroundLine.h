@@ -1,5 +1,6 @@
 #pragma once
-#include "physicssimulator.h"
+#include "PhysicsSimulator.h"
+#include "IGameObject.h"
 
 class GameControler;
 class GroundLine : public IGameObject
@@ -16,6 +17,8 @@ public:
     virtual void Destroy();
 
     virtual bool IsDestroyed();
+
+    virtual GAME_OBJECT_TYPE Type();
 
 protected:
     b2Body *_ground;

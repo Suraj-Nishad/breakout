@@ -43,3 +43,8 @@ bool GroundLine::IsDestroyed()
 {
     return false;
 }
+
+GAME_OBJECT_TYPE GroundLine::Type()
+{
+    return GAME_OBJECT_GROUND;
+}

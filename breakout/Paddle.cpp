@@ -1,7 +1,7 @@
 #include "Paddle.h"
 #include "GameControler.h"
 
-Paddle::Paddle(GameControler &game) : GameObject(game, b2_kinematicBody), _paddle_png("MCTestTaskPaddle.png")
+Paddle::Paddle(GameControler &game) : TextureGameObject(game, b2_kinematicBody), _paddle_png("MCTestTaskPaddle.png")
 {
     _paddle_png.Load(_game.Renderer());
     _paddle_png.SetColor(255,0,0);
@@ -48,4 +48,9 @@ void Paddle::GetCenterPoint(int &x, int &y)
     Texture *this_texture = GetTexture();
     x = _game.Physics().Meter2Pixel(_body->GetPosition().x);
     y = _game.Physics().Meter2Pixel(_body->GetPosition().y)-(this_texture->Height() / 2);
+}
+
+GAME_OBJECT_TYPE Paddle::Type()
+{
+    return GAME_OBJECT_PADDLE;
 }

@@ -12,6 +12,7 @@ class Ball;
 class Paddle;
 class Piece;
 class GroundLine;
+class Bonus;
 
 class Line : public IRenderElement
 {
@@ -85,6 +86,7 @@ protected:
     std::vector<Line *> _lines;
 
     std::list<Piece *> _pieces;
+    std::list<Bonus *> _bonus;
     Ball *_ball;
     Paddle *_paddle;
     GroundLine *_ground;
