@@ -1,5 +1,8 @@
 #include "Piece.h"
 #include "GameControler.h"
+
+#pragma warning(disable: 4244)
+
 PNGImage Piece::_g_piece_png("MCTestTaskPiece.png");
 
 void Piece::LoadPNG( RenderEngine &engine )

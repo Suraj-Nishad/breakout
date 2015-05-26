@@ -2,6 +2,9 @@
 #include "GameControler.h"
 #include <math.h>
 
+#pragma warning(disable:4244 4305)
+
+
 PNGImage Ball::_g_ball_png("ball.png");
 void Ball::LoadPNG( RenderEngine &engine )
 {

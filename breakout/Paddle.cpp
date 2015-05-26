@@ -1,6 +1,8 @@
 #include "Paddle.h"
 #include "GameControler.h"
 
+#pragma warning(disable:4244)
+
 Paddle::Paddle(GameControler &game) : TextureGameObject(game, b2_kinematicBody), _paddle_png("MCTestTaskPaddle.png")
 {
     _paddle_png.Load(_game.Renderer());
