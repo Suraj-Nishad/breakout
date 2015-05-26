@@ -5,6 +5,8 @@ Paddle::Paddle(GameControler &game) : TextureGameObject(game, b2_kinematicBody),
 {
     _paddle_png.Load(_game.Renderer());
     _paddle_png.SetColor(255,0,0);
+    _disapear = false;
+    _texture_alpha = 255;
     _body->SetTransform(b2Vec2(_game.Physics().Pixel2Meter(_game.Renderer().Width()/2), _game.Physics().Pixel2Meter(_game.Renderer().Height()-_paddle_png.Height()-50)), _body->GetAngle());
     b2FixtureDef fixture;
     b2PolygonShape rect;
@@ -16,8 +18,8 @@ Paddle::Paddle(GameControler &game) : TextureGameObject(game, b2_kinematicBody),
     b2Vec2 vertices[4];
     vertices[0].Set(-hx * 0.8, -hy);
     vertices[1].Set(hx * 0.8, -hy);
-    vertices[2].Set(hx * 1.1, hy);
-    vertices[3].Set(-hx * 1.1, hy);
+    vertices[2].Set(hx * 1.2, hy);
+    vertices[3].Set(-hx * 1.2, hy);
     rect.Set(vertices, 4);
 
     fixture.shape = &rect;
@@ -48,6 +50,13 @@ void Paddle::SetX(int x)
 
 Texture * Paddle::GetTexture()
 {
+    if(_disapear)
+    {
+        if(_texture_alpha > 0)
+            _texture_alpha -= 5;
+    }
+    _paddle_png.SetAlpha(_texture_alpha);
+  
     return &_paddle_png;
 }
 
@@ -61,4 +70,10 @@ void Paddle::GetCenterPoint(int &x, int &y)
 GAME_OBJECT_TYPE Paddle::Type()
 {
     return GAME_OBJECT_PADDLE;
+}
+
+void Paddle::Show()
+{
+    _disapear = false;
+    _texture_alpha = 255;
 }

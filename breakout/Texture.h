@@ -18,6 +18,12 @@ public:
     inline void Height(int h) {_height = h;}
     void SetPosition(int x, int y);
     void SetColor(Uint8 r, Uint8 g, Uint8 b);
+    inline void GetColor(Uint8 &r, Uint8 &g, Uint8 &b)
+    {
+        r = _r; g = _g; b = _b;
+    }
+    void SetAlpha(Uint8 value);
+    inline Uint8 GetAlpha(Uint8 value) {return _a;}
 
     inline int X() {return _x;}
     inline int Y() {return _y;}
@@ -38,8 +44,8 @@ protected:
     int _x, _y;
     
     //texture color
-    bool _has_color;
-    Uint8 _r, _g, _b;
+    bool _has_color, _has_alpha;
+    Uint8 _r, _g, _b, _a;
 };
 
 class WeakCopyTexture : public Texture

@@ -17,6 +17,10 @@ public:
 
     virtual GAME_OBJECT_TYPE Type();
 
+    inline void Disapear() {_disapear = true;}
+
+    void Show();
+
 protected:
 
     virtual Texture * GetTexture();
@@ -25,5 +29,7 @@ protected:
     PNGImage _paddle_png;
 
     int _min_x, _max_x;
+    bool _disapear;
+    Uint8 _texture_alpha;
 };
 

@@ -255,6 +255,7 @@ void GameControler::MouseClick()
         break;
     case GAME_STATE_LOSE:
         //Add a new ball to the game...
+        _paddle->Show();
         NewBallInGame();
         break;
     case GAME_STATE_WIN:
@@ -323,6 +324,7 @@ void GameControler::BallOutOfGame()
         //no more balls in game. User lose!!!
         _game_state = GAME_STATE_LOSE;
         Music().PlayGameOver();
+        _paddle->Disapear();
 
         //do some cleanups
         ClearBalls();

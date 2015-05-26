@@ -43,20 +43,18 @@ void PhysicsSimulator::BeginContact( b2Contact* contact )
 {
     IGameObject *obj_a = NULL, *obj_b = NULL;
     Mapb2ContactToIContactObject(contact, &obj_a, &obj_b);
-    if(obj_a != NULL && obj_b != NULL)
-    {
+    if(obj_a != NULL)
         obj_a->BeginContact(obj_b);
+    if(obj_b != NULL)
         obj_b->BeginContact(obj_a);
-    }
 }
 
 void PhysicsSimulator::EndContact(b2Contact* contact)
 {
     IGameObject *obj_a = NULL, *obj_b = NULL;
     Mapb2ContactToIContactObject(contact, &obj_a, &obj_b);
-    if(obj_a != NULL && obj_b != NULL)
-    {
+    if(obj_a != NULL)
         obj_a->EndContact(obj_b);
+    if(obj_b != NULL)
         obj_b->EndContact(obj_a);
-    }
 }
