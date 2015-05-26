@@ -48,18 +48,13 @@ RenderEngine::RenderEngine()
         SDL_Quit();
         throw std::runtime_error(ss.str());
     }
-
-    //To increase user experience, we disable the mouse cursor...
-    SDL_ShowCursor(SDL_DISABLE);
-    //and force it report relative movement.
-    SDL_SetRelativeMouseMode(SDL_TRUE);
 }
 
 
 RenderEngine::~RenderEngine(void)
 {
-    SDL_ShowCursor(SDL_ENABLE);
-    SDL_SetRelativeMouseMode(SDL_FALSE);
+    ReleaseMouseCursor();
+
 
     if(_renderer != NULL)
         SDL_DestroyRenderer(_renderer);
@@ -147,4 +142,18 @@ void RenderEngine::Render(const std::vector<IRenderElement *> &textures)
 
     //Update screen
     SDL_RenderPresent(Handle());
+}
+
+void RenderEngine::CaptureMouseCursor()
+{
+    //To increase user experience, we disable the mouse cursor...
+    SDL_ShowCursor(SDL_DISABLE);
+    //and force it report relative movement.
+    SDL_SetRelativeMouseMode(SDL_TRUE);
+}
+
+void RenderEngine::ReleaseMouseCursor()
+{
+    SDL_ShowCursor(SDL_ENABLE);
+    SDL_SetRelativeMouseMode(SDL_FALSE);
 }

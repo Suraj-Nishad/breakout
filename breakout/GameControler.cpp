@@ -265,6 +265,7 @@ void GameControler::MouseClick()
     {
     case GAME_STATE_NOT_PLAYING:
         //Waiting user to start!
+        _engine.CaptureMouseCursor();
         _balls.front()->Start();
         _game_state = GAME_STATE_PLAYING;
         break;
@@ -339,6 +340,7 @@ void GameControler::BallOutOfGame()
     if(_game_state == GAME_STATE_PLAYING)
     {
         //no more balls in game. User lose!!!
+        _engine.ReleaseMouseCursor();
         _game_state = GAME_STATE_LOSE;
         Music().PlayGameOver();
         _paddle->Disapear();

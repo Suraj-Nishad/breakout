@@ -10,7 +10,12 @@ class RenderEngine
 {
 public:
 	RenderEngine();
-	virtual ~RenderEngine(void);
+
+    void CaptureMouseCursor();
+
+    virtual ~RenderEngine(void);
+
+    void ReleaseMouseCursor();
 
 	bool CreateWindow(const std::string &title = "Breakout",
                       int width = 640,
