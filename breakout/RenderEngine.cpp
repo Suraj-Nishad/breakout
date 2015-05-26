@@ -49,13 +49,17 @@ RenderEngine::RenderEngine()
         throw std::runtime_error(ss.str());
     }
 
+    //To increase user experience, we disable the mouse cursor...
     SDL_ShowCursor(SDL_DISABLE);
+    //and force it report relative movement.
+    SDL_SetRelativeMouseMode(SDL_TRUE);
 }
 
 
 RenderEngine::~RenderEngine(void)
 {
     SDL_ShowCursor(SDL_ENABLE);
+    SDL_SetRelativeMouseMode(SDL_FALSE);
 
     if(_renderer != NULL)
         SDL_DestroyRenderer(_renderer);

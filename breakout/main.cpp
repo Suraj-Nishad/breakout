@@ -9,13 +9,13 @@
 
 int main( int argc, char* argv[] )
 {
-
     srand(SDL_GetTicks());
 
     GameControler game;
 
     bool quit = false;
     SDL_Event e;
+   
     while (!quit)
 	{
 	    if(SDL_WaitEvent(&e) != 0)
@@ -35,8 +35,17 @@ int main( int argc, char* argv[] )
                 game.HandleUserEvent(e.user);
                 break;
             case SDL_KEYUP:
-                if(e.key.keysym.sym == SDLK_ESCAPE)
+                switch(e.key.keysym.sym)
+                {
+                case SDLK_ESCAPE:
+                    quit = true;
+                    break;
+                case SDLK_BACKSPACE:
                     game.BallOutOfGame();
+                    break;
+                default:
+                    break;
+                }
                 break;
             default:
                 break;
