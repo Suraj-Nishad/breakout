@@ -7,30 +7,12 @@
 #include "Ball.h"
 #include "Paddle.h"
 
-Uint32 TimerCallback(Uint32 interval, void *param)
-{
-    SDL_Event event;
-    SDL_UserEvent userevent;
-
-    userevent.type = SDL_USEREVENT;
-    userevent.code = 0;
-    userevent.data1 = (void *)interval;
-    userevent.data2 = NULL;
-
-    event.type = SDL_USEREVENT;
-    event.user = userevent;
-
-    SDL_PushEvent(&event);
-    return(interval);
-}
-
 int main( int argc, char* argv[] )
 {
-    GameControler game;
 
     srand(SDL_GetTicks());
 
-    SDL_AddTimer(15, TimerCallback, &game);
+    GameControler game;
 
     bool quit = false;
     SDL_Event e;
@@ -50,8 +32,7 @@ int main( int argc, char* argv[] )
                 game.MouseClick();
                 break;
             case SDL_USEREVENT:
-                if(e.user.code == 0)
-                    game.Step((Uint32)e.user.data1);
+                game.HandleUserEvent(e.user);
                 break;
             case SDL_KEYUP:
                 if(e.key.keysym.sym == SDLK_ESCAPE)

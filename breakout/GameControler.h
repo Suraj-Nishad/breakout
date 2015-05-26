@@ -46,6 +46,9 @@ typedef enum
 class GameControler
 {
 public:
+    static Uint32 TimerCallBack(Uint32 interval, void *param);
+
+public:
     GameControler();
     virtual ~GameControler(void);
 
@@ -81,6 +84,8 @@ public:
     inline RenderEngine &Renderer() {return _engine;}
     inline MusicPlayer &Music() {return _music;}
 
+    void HandleUserEvent(const SDL_UserEvent &e);
+
 protected:    
     
     void ApplyBonus(BONUS_TYPE type);
@@ -107,6 +112,8 @@ protected:
     GAME_STATE _game_state;
 
     std::vector<Texture *> _lifes_ball;
+
+    Uint32 _refresh_frame_timer_id, _auto_mouse_click_timer_id;
 };
 
 

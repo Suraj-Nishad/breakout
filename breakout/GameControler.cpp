@@ -6,6 +6,10 @@
 #include "GroundLine.h"
 #include "Bonus.h"
 
+#define USEREVENT_NEW_FRAME 0
+#define USEREVENT_AUTO_MOUSE_CLICK 1
+
+
 Line::Line(PhysicsSimulator &_physics, int x0, int y0, int x1, int y1 )
 {
     _x0 = x0;
@@ -61,6 +65,9 @@ GameControler::GameControler() : _background("MCTestTaskBackground.png"), _score
     _game_state = GAME_STATE_NOT_PLAYING;
 
     CreateGameObjects();
+
+    _refresh_frame_timer_id = SDL_AddTimer(15, GameControler::TimerCallBack, (void *)USEREVENT_NEW_FRAME);
+    _auto_mouse_click_timer_id = -1;
 }
 
 GameControler::~GameControler(void)
@@ -71,6 +78,9 @@ GameControler::~GameControler(void)
     }
     if(_ground)
         delete _ground;
+
+    SDL_RemoveTimer(_refresh_frame_timer_id);
+    SDL_RemoveTimer(_auto_mouse_click_timer_id);
 
     DestroyGameObjects();
 
@@ -246,6 +256,11 @@ void GameControler::CreateGameObjects( unsigned int number_of_life /*= 3*/ )
 
 void GameControler::MouseClick()
 {
+    if(_auto_mouse_click_timer_id != -1)
+    {
+        SDL_RemoveTimer(_auto_mouse_click_timer_id);
+        _auto_mouse_click_timer_id = -1;
+    }
     switch(_game_state)
     {
     case GAME_STATE_NOT_PLAYING:
@@ -290,6 +305,8 @@ void GameControler::GameWin()
         ClearBonus();
     
         _game_state = GAME_STATE_WIN;
+        Music().PlayWin();
+        _auto_mouse_click_timer_id = SDL_AddTimer(3000, TimerCallBack, (void *)USEREVENT_AUTO_MOUSE_CLICK);
     }
 }
 
@@ -332,6 +349,8 @@ void GameControler::BallOutOfGame()
         //if no more lifes, game is over!
         if(_lifes_ball.empty())
             GameOver();
+
+        _auto_mouse_click_timer_id = SDL_AddTimer(3000, TimerCallBack, (void *)USEREVENT_AUTO_MOUSE_CLICK);
     }
 }
 
@@ -393,4 +412,40 @@ void GameControler::AddNewLife()
 {
     _lifes_ball.push_back(new WeakCopyTexture(Ball::Image()));
     _lifes_ball.back()->SetPosition(WidthPixel() - 2*(_lifes_ball.size()-1)*GAME_AREA_MARGIN, 0);
+}
+
+Uint32 GameControler::TimerCallBack( Uint32 interval, void *param )
+{
+    SDL_Event event;
+    SDL_UserEvent userevent;
+
+    userevent.type = SDL_USEREVENT;
+    userevent.code = (Sint32)param;
+    userevent.data1 = (void *)interval;
+    userevent.data2 = NULL;
+
+    event.type = SDL_USEREVENT;
+    event.user = userevent;
+
+    SDL_PushEvent(&event);
+    if(userevent.code == USEREVENT_NEW_FRAME)
+       return(interval);
+    else
+       return 0;
+}
+
+void GameControler::HandleUserEvent(const SDL_UserEvent &e)
+{
+    switch(e.code)
+    {
+    case USEREVENT_NEW_FRAME:
+        Step((Uint32)e.data1);
+        break;
+    case USEREVENT_AUTO_MOUSE_CLICK:
+        _auto_mouse_click_timer_id = -1;
+        MouseClick();
+        break;
+    default:
+        break;
+    }
 }

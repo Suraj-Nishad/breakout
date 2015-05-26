@@ -19,9 +19,11 @@ public:
 
     inline void PlayBonus() {PlayChunck(_bonus);}
 
+    inline void PlayWin() {PlayChunck(_win);}
+
 protected:
     void PlayChunck(Mix_Chunk *chunck);
 
-    Mix_Chunk *_bounce, *_game_over, *_game_start, *_extra_life, *_bonus;
+    Mix_Chunk *_bounce, *_game_over, *_game_start, *_extra_life, *_bonus, *_win;
 };
 
