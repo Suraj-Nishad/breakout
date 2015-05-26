@@ -32,8 +32,6 @@ protected:
     Texture(void);
     Texture(const Texture &another_texture);
 
- 
-
     virtual SDL_Texture *GetTexture() = 0;
 
     int _width, _height;

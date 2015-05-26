@@ -23,7 +23,7 @@ void Line::Show( RenderEngine &_engine )
     SDL_RenderDrawLine( _engine.Handle(), _x0, _y0, _x1, _y1);
 }
 
-GameControler::GameControler() : _background("MCTestTaskBackground.png")
+GameControler::GameControler() : _background("MCTestTaskBackground.png"), _score_board(_engine)
 {
     //Create the game window
     _engine.CreateWindow("Breakout", 500, 700);
@@ -80,8 +80,7 @@ GameControler::~GameControler(void)
 void GameControler::Step(Uint32 timer_value)
 {
     //Step the physics simulation
-    _physics.Step((float)timer_value/1000);
-   
+    _physics.Step((float)timer_value/1000);  
 
     //and now iterates over all elements and create the textures vector to render.
     std::vector<IRenderElement *> textures;
@@ -106,6 +105,7 @@ void GameControler::Step(Uint32 timer_value)
         }
         else
         {
+            _score_board.Add((*itr)->Width() / 10);
             if((*itr)->HasBonus())
                 _bonus.push_back(new Bonus(*this, *(*itr)));
             delete (*itr);
@@ -174,6 +174,9 @@ void GameControler::Step(Uint32 timer_value)
     for(unsigned int i=0; i<_lines.size(); i++)
         textures.push_back(_lines[i]);
 
+    //.. and the score board
+    textures.push_back(&_score_board);
+
 
     //render everything!
     _engine.Render(textures);
@@ -216,8 +219,7 @@ void GameControler::CreateGameObjects( unsigned int number_of_life /*= 3*/ )
     //.. a number of balls that represent lifes.
     for(unsigned int i=0; i<number_of_life; i++)
     {
-        _lifes_ball.push_back(new WeakCopyTexture(Ball::Image()));
-        _lifes_ball.back()->SetPosition(GAME_AREA_MARGIN + 2*i*GAME_AREA_MARGIN, 0);
+        AddNewLife();
     }
     
     //Fill the top with 4 rows of pieces.
@@ -267,6 +269,7 @@ void GameControler::MouseClick()
         //Restart the game!
         DestroyGameObjects();
         CreateGameObjects();
+        _score_board.Reset();
         break;
     default:
         break;
@@ -374,13 +377,18 @@ void GameControler::ApplyBonus( BONUS_TYPE type )
         break;
     case BONUS_EXTRA_LIFE:
         {
-            int current_number = _lifes_ball.size();
-            _lifes_ball.push_back(new WeakCopyTexture(Ball::Image()));
-            _lifes_ball.back()->SetPosition(GAME_AREA_MARGIN + 2*current_number*GAME_AREA_MARGIN, 0);
+            AddNewLife();
+
             Music().PlayExtraLife();
         }
         break;
     default:
         break;
     }
+}
+
+void GameControler::AddNewLife()
+{
+    _lifes_ball.push_back(new WeakCopyTexture(Ball::Image()));
+    _lifes_ball.back()->SetPosition(WidthPixel() - 2*(_lifes_ball.size()-1)*GAME_AREA_MARGIN, 0);
 }

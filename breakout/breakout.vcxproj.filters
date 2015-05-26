@@ -40,6 +40,9 @@
     <ClCompile Include="TextureGameObject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ScoreBoard.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\images\MCTestTaskBackground.png">
@@ -107,6 +110,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="TextureGameObject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ScoreBoard.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

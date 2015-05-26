@@ -6,6 +6,7 @@
 #include "Texture.h"
 #include "PNGImage.h"
 #include "Bonus.h"
+#include "ScoreBoard.h"
 #include <vector>
 #include <list>
 
@@ -68,9 +69,6 @@ public:
 
     void Step(Uint32 timer_value);
 
-
-
-
     inline int WidthPixel() {return _width;}
     inline int HeightPixel() {return _height;}
     inline int MarginPixel() {return GAME_AREA_MARGIN;}
@@ -86,12 +84,14 @@ public:
 protected:    
     
     void ApplyBonus(BONUS_TYPE type);
-    
+
+    void AddNewLife();
     
     RenderEngine _engine;
     PhysicsSimulator _physics;
     MusicPlayer _music;
     PNGImage _background;
+    ScoreBoard _score_board;
 
     b2Body *_body;
     int _width, _height;

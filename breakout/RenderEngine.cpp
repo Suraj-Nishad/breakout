@@ -3,6 +3,7 @@
 #include <sstream>
 #include <stdexcept>
 #include "SDL_log.h"
+#include "SDL_ttf.h"
 
 RenderEngine::RenderEngine()
 {
@@ -36,6 +37,18 @@ RenderEngine::RenderEngine()
 		throw std::runtime_error(ss.str());
 	}
 
+    //initialize ttf
+    if(TTF_Init() < 0)
+    {
+        std::stringstream ss;
+        ss << "SDL_ttf could not initialize. Error " << TTF_GetError();
+        SDL_LogCritical(SDL_LOG_CATEGORY_APPLICATION, "%s", ss.str().c_str());
+
+        IMG_Quit();
+        SDL_Quit();
+        throw std::runtime_error(ss.str());
+    }
+
     SDL_ShowCursor(SDL_DISABLE);
 }
 
@@ -49,6 +62,9 @@ RenderEngine::~RenderEngine(void)
 
     if(_window != NULL)
         SDL_DestroyWindow(_window);
+
+    //shutdown SDL_ttf library
+    TTF_Quit();
 
     //shutdown SDL_image library
 	IMG_Quit();

@@ -56,7 +56,7 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)SDL2-2.0.3\lib\x86;$(SolutionDir)Box2D\lib\$(Configuration)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;Box2D.lib;SDL2_mixer.lib;msvcrt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;Box2D.lib;SDL2_mixer.lib;SDL2_ttf.lib;msvcrt.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
       <IgnoreSpecificDefaultLibraries>
       </IgnoreSpecificDefaultLibraries>
@@ -64,7 +64,8 @@
     <PostBuildEvent>
       <Command>xcopy /y "$(SolutionDir)SDL2-2.0.3\lib\x86\*.dll" "$(OutDir)"
 xcopy /y "$(SolutionDir)images\*.png" "$(OutDir)"
-xcopy /y "$(SolutionDir)sounds\*.aif" "$(OutDir)"</Command>
+xcopy /y "$(SolutionDir)sounds\*.aif" "$(OutDir)"
+xcopy /y "$(SolutionDir)fonts\*.ttf" "$(OutDir)"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -85,18 +86,20 @@ xcopy /y "$(SolutionDir)sounds\*.aif" "$(OutDir)"</Command>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalLibraryDirectories>$(SolutionDir)SDL2-2.0.3\lib\x86;$(SolutionDir)Box2D\lib\$(Configuration)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;Box2D.lib;SDL2_mixer.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;Box2D.lib;SDL2_mixer.lib;SDL2_ttf.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>xcopy /y "$(SolutionDir)SDL2-2.0.3\lib\x86\*.dll" "$(OutDir)"
 xcopy /y "$(SolutionDir)images\*.png" "$(OutDir)"
-xcopy /y "$(SolutionDir)sounds\*.aif" "$(OutDir)"</Command>
+xcopy /y "$(SolutionDir)sounds\*.aif" "$(OutDir)"
+xcopy /y "$(SolutionDir)fonts\*.ttf" "$(OutDir)"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Ball.cpp" />
     <ClCompile Include="Bonus.cpp" />
     <ClCompile Include="GameControler.cpp" />
+    <ClCompile Include="ScoreBoard.cpp" />
     <ClCompile Include="TextureGameObject.cpp" />
     <ClCompile Include="GroundLine.cpp" />
     <ClCompile Include="main.cpp" />
@@ -112,6 +115,7 @@ xcopy /y "$(SolutionDir)sounds\*.aif" "$(OutDir)"</Command>
     <ClInclude Include="Ball.h" />
     <ClInclude Include="Bonus.h" />
     <ClInclude Include="GameControler.h" />
+    <ClInclude Include="ScoreBoard.h" />
     <ClInclude Include="TextureGameObject.h" />
     <ClInclude Include="GroundLine.h" />
     <ClInclude Include="IGameObject.h" />
